@@ -9,7 +9,7 @@
     <Import_RootNamespace>QuizShared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Game\Highscores.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Game\Scores.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Game\Question.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Networking\TcpProtocol.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Networking\TcpReadWrite.cs" />
