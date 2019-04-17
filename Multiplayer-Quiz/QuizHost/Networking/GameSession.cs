@@ -3,6 +3,7 @@ using QuizShared.Game;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,16 +13,19 @@ namespace Multiplayer_Quiz.Networking
     class GameSession
     {
         private GameLogic gameLogic;
-        // TODO: private Players
+        private List<ClientHandler> clientHandlers = new List<ClientHandler>();
+        private List<Question> questions;
 
-        public GameSession(List<Question> questions)
+        public GameSession(List<TcpClient> clients, List<Question> questions)
         {
-            // Do stuff
-
-            StartGame(questions);
+            int id = 0;
+            foreach (TcpClient client in clients)
+                clientHandlers.Add(new ClientHandler(client, id++));
+            this.questions = questions;
+            StartGame();
         }
 
-        public void StartGame(List<Question> questions)
+        public void StartGame()
         {
             // Intis...
             int players = 2; // TODO: get player count from ClientHandler list

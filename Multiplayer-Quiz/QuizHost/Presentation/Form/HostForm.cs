@@ -5,8 +5,10 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Multiplayer_Quiz.Networking;
 
 namespace Multiplayer_Quiz
 {
@@ -19,7 +21,8 @@ namespace Multiplayer_Quiz
 
         private void Form_Load(object sender, EventArgs e)
         {
-
+            Server server = new Server();
+            new Thread(server.RunServer).Start();
         }
     }
 }

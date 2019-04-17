@@ -28,10 +28,9 @@ namespace Multiplayer_Quiz.Networking
 
         public JObject Read()
         {
-            
             try
             {
-                return JsonConvert.DeserializeObject<dynamic>((string)TcpReadWrite.Read(client));
+                return TcpReadWrite.Read(client);
             }
             catch (Exception exception)
             {
