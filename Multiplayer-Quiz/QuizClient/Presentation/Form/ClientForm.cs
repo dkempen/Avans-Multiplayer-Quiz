@@ -9,7 +9,7 @@ using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 
 namespace QuizClient
 {
-    public partial class ClientForm : System.Windows.Forms.Form
+    public partial class ClientForm : Form
     {
         private List<Panel> panels = new List<Panel>();
         private Panel currentPanel;
@@ -72,6 +72,8 @@ namespace QuizClient
                     ClientSize.Height / 2 - panel.Size.Height / 2);
                 panel.Anchor = AnchorStyles.None;
             }
+
+            QuestionPanel.Dock = DockStyle.Fill;
         }
 
         // Shortcut to reliably close the form with the escape key
@@ -94,6 +96,7 @@ namespace QuizClient
             panels.Add(LobbyPanel);
             panels.Add(QuestionPanel);
             panels.Add(WaitPanel);
+            panels.Add(ScoresPanel);
 
             foreach (Panel panel in panels)
                 panel.Visible = false;
@@ -110,6 +113,8 @@ namespace QuizClient
                     currentPanel = p;
                     currentPanel.Visible = true;
                     currentGamePanel = panel;
+
+                    BackColor = currentPanel.BackColor;
                     return;
                 }
         }
@@ -124,7 +129,8 @@ namespace QuizClient
                 case GamePanel.Ip: SetPanel(GamePanel.Lobby); break;
                 case GamePanel.Lobby: SetPanel(GamePanel.Question); break;
                 case GamePanel.Question: SetPanel(GamePanel.Wait); break;
-                case GamePanel.Wait: SetPanel(GamePanel.Ip); break;
+                case GamePanel.Wait: SetPanel(GamePanel.Scores); break;
+                case GamePanel.Scores: SetPanel(GamePanel.Ip); break;
                 default: SetPanel(GamePanel.Ip); break;
             }
         }
@@ -132,7 +138,7 @@ namespace QuizClient
         // Abstraction for selecting panels
         public enum GamePanel
         {
-            Ip, Lobby, Question, Wait
+            Ip, Lobby, Question, Wait, Scores
         }
     }
 }
