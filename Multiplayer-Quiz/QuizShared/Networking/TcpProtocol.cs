@@ -28,8 +28,8 @@ namespace QuizShared.Networking
         {
             return new JObject
             {
-                {Command, "questionScores"},
-                {Data, new JObject
+                {"command", "questionScores"},
+                {"data", new JObject
                 {
                     "question", JsonConvert.SerializeObject(question),
                     "scores", JsonConvert.SerializeObject(scores)
@@ -37,11 +37,26 @@ namespace QuizShared.Networking
             };
         }
 
+        public static JObject QuestionScoresSend1(Question question)
+        {
+            return new JObject
+            {
+                {"command", "questionScores"},
+                {Data, JsonConvert.SerializeObject(question) }
+            };
+        }
         public static Tuple<Question, Scores> QuestionScoresParse(JObject json)
         {
             return new Tuple<Question, Scores>(
                 JsonConvert.DeserializeObject<Question>((string)json[Data]["question"]),
                 JsonConvert.DeserializeObject<Scores>((string)json[Data]["scores"]));
+        }
+
+        public static Question QuestionScoresParse1(JObject json)
+        {
+            return
+                JsonConvert.DeserializeObject<Question>((string)json[Data]);
+               
         }
 
         public static JObject EndScoresSend(Scores scores)

@@ -10,7 +10,7 @@ namespace Multiplayer_Quiz.Networking
 {
     class Server
     {
-        private const int NUMBER_OF_PLAYERS = 2;
+        private const int NUMBER_OF_PLAYERS = 1;
 
         private TcpListener tcpListener;
         private List<TcpClient> clients = new List<TcpClient>();

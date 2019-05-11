@@ -13,6 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizHost", "QuizHost\QuizHo
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		QuizShared\QuizShared.projitems*{23224a6a-f2b4-45cb-9ebf-8aeea1460598}*SharedItemsImports = 4
 		QuizShared\QuizShared.projitems*{49f5abe3-885f-44e7-98f3-c67895c1c292}*SharedItemsImports = 13
 		QuizShared\QuizShared.projitems*{e7802044-7bf8-4d22-9ef1-f906f25ba7bb}*SharedItemsImports = 4
 	EndGlobalSection

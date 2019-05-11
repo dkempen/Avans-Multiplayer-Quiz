@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using QuizShared.Game;
+using QuizShared.Networking;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace QuizClient.Networking
 {
@@ -12,9 +15,28 @@ namespace QuizClient.Networking
     {
         private TcpClient client;
 
+
         public void RunClient()
         {
             client = new TcpClient(GetLocalIPAddress().ToString(), 6969);
+
+            while (true)
+            {
+                JObject received = TcpReadWrite.Read(client);
+                string command = (string)received["command"];
+
+                Question question;
+                //Tuple<Question, Scores> tuple;
+
+                
+                if (command == "questionScores")
+                {
+                     question = ReadQuestionAndScore1();
+
+                    Console.WriteLine("Question: " + question);
+                    
+                }
+            }
         }
 
         public static IPAddress GetLocalIPAddress()
@@ -24,6 +46,39 @@ namespace QuizClient.Networking
                 if (ip.AddressFamily == AddressFamily.InterNetwork)
                     return ip;
             throw new Exception("No network adapters with an IPv4 address in the system!");
+        }
+
+        private Scores ReadEndScore()
+        {
+            JObject recieved = TcpReadWrite.Read(client);
+            Scores score = TcpProtocol.EndScoresParse(recieved);
+            return score;
+        }
+
+        private Tuple<Question, Scores> ReadQuestionAndScore()
+        {
+            JObject received = TcpReadWrite.Read(client);
+            Tuple<Question, Scores> tuple;
+            tuple = TcpProtocol.QuestionScoresParse(received);
+            return tuple;
+        }
+
+        private Question ReadQuestionAndScore1()
+        {
+            JObject received = TcpReadWrite.Read(client);
+            Question question;
+            question = TcpProtocol.QuestionScoresParse1(received);
+            return question;
+        }
+
+        private bool ReadEndGame()
+        {
+            JObject received = TcpReadWrite.Read(client);
+            string command = (string)received["command"];
+
+            if (command == "endScores")
+                return true;
+            return false;
         }
     }
 }

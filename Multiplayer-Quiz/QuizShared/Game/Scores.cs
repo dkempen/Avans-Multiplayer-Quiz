@@ -2,7 +2,7 @@
 
 namespace QuizShared.Game
 {
-    class Scores
+    public class Scores
     {
         // Scores saved in a list with an int array: 0 is the id, 1 is the score
         private readonly List<int[]> _scores = new List<int[]>();

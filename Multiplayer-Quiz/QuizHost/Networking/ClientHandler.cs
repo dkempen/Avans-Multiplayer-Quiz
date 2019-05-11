@@ -38,5 +38,10 @@ namespace Multiplayer_Quiz.Networking
                 return null;
             }
         }
+
+        public int getId()
+        {
+            return this.id;
+        }
     }
 }
