@@ -1,14 +1,13 @@
-﻿using System;
+﻿using QuizShared.Game;
+using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using QuizShared.Game;
 
 namespace Multiplayer_Quiz.Networking
 {
-    class Server
+    internal class Server
     {
         private const int NUMBER_OF_PLAYERS = 1;
 
@@ -26,7 +25,7 @@ namespace Multiplayer_Quiz.Networking
                 TcpClient client;
                 try
                 {
-                    new Timer(state => { tcpListener.Stop(); }, 
+                    new Timer(state => { tcpListener.Stop(); },
                         null, 1000, Timeout.Infinite);
                     client = tcpListener.AcceptTcpClient();
                     Console.WriteLine("Got a client!!!");

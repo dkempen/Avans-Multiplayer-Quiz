@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using QuizShared.Game;
+using System;
 
 namespace QuizShared.Networking
 {
@@ -14,14 +13,14 @@ namespace QuizShared.Networking
         #region Helper methods
         public static string GetCommand(JObject json)
         {
-            return (string) json[Command];
+            return (string)json[Command];
         }
 
         public static string GetData(JObject json)
         {
             return (string)json[Data];
         }
-        #endregion
+        #endregion Helper methods
 
         #region Send by Host
         public static JObject QuestionScoresSend(Question question, Scores scores)
@@ -31,32 +30,17 @@ namespace QuizShared.Networking
                 {"command", "questionScores"},
                 {"data", new JObject
                 {
-                    "question", JsonConvert.SerializeObject(question),
-                    "scores", JsonConvert.SerializeObject(scores)
+                    {"question", JsonConvert.SerializeObject(question)},
+                    {"scores", JsonConvert.SerializeObject(scores)}
                 }}
             };
         }
 
-        public static JObject QuestionScoresSend1(Question question)
-        {
-            return new JObject
-            {
-                {"command", "questionScores"},
-                {Data, JsonConvert.SerializeObject(question) }
-            };
-        }
         public static Tuple<Question, Scores> QuestionScoresParse(JObject json)
         {
             return new Tuple<Question, Scores>(
                 JsonConvert.DeserializeObject<Question>((string)json[Data]["question"]),
                 JsonConvert.DeserializeObject<Scores>((string)json[Data]["scores"]));
-        }
-
-        public static Question QuestionScoresParse1(JObject json)
-        {
-            return
-                JsonConvert.DeserializeObject<Question>((string)json[Data]);
-               
         }
 
         public static JObject EndScoresSend(Scores scores)
@@ -72,7 +56,7 @@ namespace QuizShared.Networking
         {
             return JsonConvert.DeserializeObject<Scores>((string)json[Data]);
         }
-        #endregion
+        #endregion Send by Host
 
         #region Send by Client
         public static JObject TimeSend(int time)
@@ -88,6 +72,6 @@ namespace QuizShared.Networking
         {
             return (int)json[Data];
         }
-        #endregion
+        #endregion Send by Client
     }
 }

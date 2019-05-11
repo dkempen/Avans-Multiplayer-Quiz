@@ -47,7 +47,7 @@ namespace QuizShared.Networking
                 Console.WriteLine(@"Client has disconnected");
                 throw;
             }
-            return new JObject(message);
+            return JObject.Parse(message.ToString());
         }
     }
 }

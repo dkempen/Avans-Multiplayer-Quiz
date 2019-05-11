@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace QuizShared.Game
 {
+    [JsonObject(MemberSerialization.Fields)]
     public class Scores
     {
         // Scores saved in a list with an int array: 0 is the id, 1 is the score

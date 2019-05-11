@@ -2,30 +2,29 @@
 using Newtonsoft.Json.Linq;
 using QuizShared.Game;
 using QuizShared.Networking;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Multiplayer_Quiz.Networking
 {
-    class GameSession
+    internal class GameSession
     {
         private GameLogic gameLogic;
         private List<ClientHandler> clientHandlers = new List<ClientHandler>();
         private List<Question> questions;
         private Scores scores;
-        List<int> ids = new List<int>();
+        private List<int> ids = new List<int>();
 
         public GameSession(List<TcpClient> clients, List<Question> questions)
         {
             int id = 0;
             foreach (TcpClient client in clients)
-                clientHandlers.Add(new ClientHandler(client, id++));
-            ids.Add(id);
+            {
+                clientHandlers.Add(new ClientHandler(client, id));
+                ids.Add(id++);
+            }
             this.questions = questions;
 
             StartGame();
@@ -35,9 +34,11 @@ namespace Multiplayer_Quiz.Networking
         {
             // Intis
             int players = clientHandlers.Count();
-            
+
             gameLogic = new GameLogic(questions, players);
             Question currentQuestion;
+
+            scores = new Scores(ids);
 
             // Start the game loop
             while (true)
@@ -50,10 +51,8 @@ namespace Multiplayer_Quiz.Networking
                 }
                 // Send out the question + scores to the clients
                 // TODO: loop through all clients and send them stuff
-                foreach(ClientHandler client in clientHandlers)
-                {
-                    client.Write(TcpProtocol.QuestionScoresSend1(currentQuestion));   
-                }
+                foreach (ClientHandler client in clientHandlers)
+                    client.Write(TcpProtocol.QuestionScoresSend(currentQuestion, scores));
 
                 // Wait for all clients to be finished (in threads)
                 while (true) // TODO: replace with check if clients are finished
@@ -75,20 +74,15 @@ namespace Multiplayer_Quiz.Networking
             }
 
             // Kick all
-            foreach(ClientHandler client in clientHandlers)
-            {
+            foreach (ClientHandler client in clientHandlers)
                 clientHandlers.Remove(client);
-            }
         }
 
         private void Broadcast(JObject message)
         {
-            foreach (ClientHandler client in clientHandlers) {
+            foreach (ClientHandler client in clientHandlers)
                 client.Write(message);
-            }
         }
-
-
 
         private void ShowQuestion(Question question, int[] scores)
         {
@@ -102,7 +96,5 @@ namespace Multiplayer_Quiz.Networking
 
             return playertime;
         }
-
-       
     }
 }

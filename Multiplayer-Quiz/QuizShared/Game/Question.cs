@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Newtonsoft.Json;
 
 namespace QuizShared.Game
 {
+    [JsonObject(MemberSerialization.Fields)]
     public class Question
     {
         private string question;

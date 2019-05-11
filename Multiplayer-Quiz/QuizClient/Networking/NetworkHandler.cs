@@ -31,7 +31,7 @@ namespace QuizClient.Networking
                 
                 if (command == "questionScores")
                 {
-                     question = ReadQuestionAndScore1();
+                     question = ReadQuestionAndScore().Item1;
 
                     Console.WriteLine("Question: " + question);
                     
@@ -61,14 +61,6 @@ namespace QuizClient.Networking
             Tuple<Question, Scores> tuple;
             tuple = TcpProtocol.QuestionScoresParse(received);
             return tuple;
-        }
-
-        private Question ReadQuestionAndScore1()
-        {
-            JObject received = TcpReadWrite.Read(client);
-            Question question;
-            question = TcpProtocol.QuestionScoresParse1(received);
-            return question;
         }
 
         private bool ReadEndGame()
