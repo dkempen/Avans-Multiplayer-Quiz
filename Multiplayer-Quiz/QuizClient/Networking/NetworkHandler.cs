@@ -15,7 +15,6 @@ namespace QuizClient.Networking
     {
         private TcpClient client;
 
-
         public void RunClient()
         {
             client = new TcpClient(GetLocalIPAddress().ToString(), 6969);
@@ -25,20 +24,59 @@ namespace QuizClient.Networking
                 JObject received = TcpReadWrite.Read(client);
                 string command = (string)received["command"];
 
-                Question question;
-                //Tuple<Question, Scores> tuple;
-
-                
                 if (command == "questionScores")
                 {
-                     question = ReadQuestionAndScore().Item1;
+                    HandleQuestions(received);
+                    HandleScores(received);
+                    HandleAwnsers(received);
 
-                    Console.WriteLine("Question: " + question);
-                    
+                    //placeholder for score
+                    int time = 500;
+                    SendTime(500);
                 }
+
+                
             }
         }
 
+        private string HandleQuestions(JObject data)
+        {
+            Question question;
+            question = TcpProtocol.ReadQuestionAndScore(data).Item1;
+
+            //For debugging
+            string Question = question.GetQuestion();
+            Console.WriteLine("Question: " + Question);
+
+            return Question;
+        }
+
+        private Scores HandleScores(JObject data)
+        {
+            Scores score = TcpProtocol.ReadQuestionAndScore(data).Item2;
+            //for debugging
+            score.ToString();
+
+            return score;
+        }
+
+        private List<string> HandleAwnsers(JObject data)
+        {
+            Question question;
+            question = TcpProtocol.ReadQuestionAndScore(data).Item1;
+
+            string[] awnser = question.GetAnswers();
+            List<string> awnsers = new List<string>();
+
+            for (int i = 0; i < 4; i++)
+            {
+                awnsers.Add(awnser[i]);
+                //for debugging
+                Console.WriteLine("Awnser: " + awnser[i]);
+            }
+                
+            return awnsers;
+        }
         public static IPAddress GetLocalIPAddress()
         {
             IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
@@ -48,19 +86,16 @@ namespace QuizClient.Networking
             throw new Exception("No network adapters with an IPv4 address in the system!");
         }
 
+        private void SendTime(int time)
+        {
+            TcpReadWrite.Write(client, TcpProtocol.TimeSend(time));
+        }
+
         private Scores ReadEndScore()
         {
             JObject recieved = TcpReadWrite.Read(client);
             Scores score = TcpProtocol.EndScoresParse(recieved);
             return score;
-        }
-
-        private Tuple<Question, Scores> ReadQuestionAndScore()
-        {
-            JObject received = TcpReadWrite.Read(client);
-            Tuple<Question, Scores> tuple;
-            tuple = TcpProtocol.QuestionScoresParse(received);
-            return tuple;
         }
 
         private bool ReadEndGame()

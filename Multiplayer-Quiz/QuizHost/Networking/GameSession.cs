@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using QuizShared.Game;
 using QuizShared.Networking;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
@@ -54,9 +55,20 @@ namespace Multiplayer_Quiz.Networking
                 foreach (ClientHandler client in clientHandlers)
                     client.Write(TcpProtocol.QuestionScoresSend(currentQuestion, scores));
 
+                int finishedClients = 0;
                 // Wait for all clients to be finished (in threads)
-                while (true) // TODO: replace with check if clients are finished
+                while (finishedClients != players) 
                 {
+                    foreach(ClientHandler client in clientHandlers)
+                    {
+                        int playertime = ReadPlayerTime(client);
+                        scores.AddToScore(client.id, playertime);
+                        finishedClients++;
+
+                        //for debugging
+                        Console.WriteLine("Playertime: " + playertime);
+                        Console.WriteLine("PlayerID: " + client.id + "Score: " + scores.GetScore(client.id));
+                    }
                     Thread.Sleep(1);
                 }
 
@@ -73,7 +85,7 @@ namespace Multiplayer_Quiz.Networking
                 client.Write(TcpProtocol.EndScoresSend(scores));
             }
 
-            // Kick all
+            // Kick all TODO: Still needs fix(gives an error after ending)
             foreach (ClientHandler client in clientHandlers)
                 clientHandlers.Remove(client);
         }

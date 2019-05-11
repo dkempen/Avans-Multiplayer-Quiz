@@ -70,7 +70,9 @@ namespace Multiplayer_Quiz.Networking
             Console.WriteLine("Start Game!");
             List<Question> questions = new List<Question>();
             string[] items = { "Item1", "Item2", "Item3", "Item4" };
+            string[] items2 = { "Item1", "Item2", "Item3", "Item4" };
             questions.Add(new Question("A question?", items));
+            questions.Add(new Question("Is een banaan geel?", items2));
             new GameSession(clients, questions);
         }
 

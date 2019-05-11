@@ -68,6 +68,13 @@ namespace QuizShared.Networking
             };
         }
 
+        public static Tuple<Question, Scores> ReadQuestionAndScore(JObject message)
+        {
+            Tuple<Question, Scores> tuple;
+            tuple = TcpProtocol.QuestionScoresParse(message);
+            return tuple;
+        }
+
         public static int TimeParse(JObject json)
         {
             return (int)json[Data];
