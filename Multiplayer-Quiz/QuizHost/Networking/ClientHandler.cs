@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using QuizShared.Networking;
+using System;
+using System.Net.Sockets;
 
 namespace Multiplayer_Quiz.Networking
 {
-    class ClientHandler
+    internal class ClientHandler
     {
         private TcpClient client;
         public int id;
@@ -42,6 +37,11 @@ namespace Multiplayer_Quiz.Networking
         public int getId()
         {
             return this.id;
+        }
+
+        public void Close()
+        {
+            client.Close();
         }
     }
 }

@@ -68,7 +68,7 @@ namespace QuizShared.Networking
             };
         }
 
-        public static Tuple<Question, Scores> ReadQuestionAndScore(JObject message)
+        public static Tuple<Question, Scores> QuestionAndScoreParse(JObject message)
         {
             Tuple<Question, Scores> tuple;
             tuple = TcpProtocol.QuestionScoresParse(message);

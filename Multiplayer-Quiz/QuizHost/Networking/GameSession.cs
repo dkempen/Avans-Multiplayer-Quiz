@@ -15,7 +15,6 @@ namespace Multiplayer_Quiz.Networking
         private GameLogic gameLogic;
         private List<ClientHandler> clientHandlers = new List<ClientHandler>();
         private List<Question> questions;
-        private Scores scores;
         private List<int> ids = new List<int>();
 
         public GameSession(List<TcpClient> clients, List<Question> questions)
@@ -36,10 +35,8 @@ namespace Multiplayer_Quiz.Networking
             // Intis
             int players = clientHandlers.Count();
 
-            gameLogic = new GameLogic(questions, players);
+            gameLogic = new GameLogic(questions, players, ids);
             Question currentQuestion;
-
-            scores = new Scores(ids);
 
             // Start the game loop
             while (true)
@@ -50,29 +47,26 @@ namespace Multiplayer_Quiz.Networking
                     EndGame();
                     return;
                 }
-                // Send out the question + scores to the clients
-                // TODO: loop through all clients and send them stuff
-                foreach (ClientHandler client in clientHandlers)
-                    client.Write(TcpProtocol.QuestionScoresSend(currentQuestion, scores));
 
-                int finishedClients = 0;
+                // Send out the question + scores to the clients
+                Broadcast(TcpProtocol.QuestionScoresSend(currentQuestion, gameLogic.GetScores()));
+
                 // Wait for all clients to be finished (in threads)
+                int finishedClients = 0;
                 while (finishedClients != players) 
                 {
                     foreach(ClientHandler client in clientHandlers)
                     {
-                        int playertime = ReadPlayerTime(client);
-                        scores.AddToScore(client.id, playertime);
+                        int playerTime = TcpProtocol.TimeParse(client.Read());
+                        gameLogic.AddToScore(client.id, playerTime);
                         finishedClients++;
 
                         //for debugging
-                        Console.WriteLine("Playertime: " + playertime);
-                        Console.WriteLine("PlayerID: " + client.id + "Score: " + scores.GetScore(client.id));
+                        Console.WriteLine("Playertime: " + playerTime);
+                        Console.WriteLine("PlayerID: " + client.id + "Score: " + gameLogic.GetScore(client.id));
                     }
                     Thread.Sleep(1);
                 }
-
-                //gameLogic.AddScore(); // TODO: do this in callback thread
             }
         }
 
@@ -81,13 +75,14 @@ namespace Multiplayer_Quiz.Networking
             //Update de highscores en send de highscores
             foreach (ClientHandler client in clientHandlers)
             {
-                scores.GetScore(client.id);
-                client.Write(TcpProtocol.EndScoresSend(scores));
+                gameLogic.GetScore(client.id);
+                client.Write(TcpProtocol.EndScoresSend(gameLogic.GetScores()));
             }
 
-            // Kick all TODO: Still needs fix(gives an error after ending)
+            // Kick all
             foreach (ClientHandler client in clientHandlers)
-                clientHandlers.Remove(client);
+                client.Close();
+            clientHandlers.Clear();
         }
 
         private void Broadcast(JObject message)
@@ -99,14 +94,6 @@ namespace Multiplayer_Quiz.Networking
         private void ShowQuestion(Question question, int[] scores)
         {
 
-        }
-
-        private int ReadPlayerTime(ClientHandler client)
-        {
-            JObject jObject = client.Read();
-            int playertime = TcpProtocol.TimeParse(jObject);
-
-            return playertime;
         }
     }
 }

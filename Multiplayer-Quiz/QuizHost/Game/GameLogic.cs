@@ -11,14 +11,14 @@ namespace Multiplayer_Quiz.Game
     class GameLogic
     {
         private List<Question> questions;
-        private int[] scores;
+        private Scores scores;
         private int playerCount;
         private int index;
 
-        public GameLogic(List<Question> questions, int playerCount)
+        public GameLogic(List<Question> questions, int playerCount, List<int> ids)
         {
             this.questions = questions;
-            scores = new int[playerCount];
+            scores = new Scores(ids);
             this.playerCount = playerCount;
             index = -1;
         }
@@ -31,14 +31,19 @@ namespace Multiplayer_Quiz.Game
             return questions[index];
         }
 
-        public void AddScore(int playerIndex, int time)
+        public void AddToScore(int playerId, int time)
         {
-            scores[playerIndex] += 1 / time; // TODO: Change score formula
+            scores.AddToScore(playerId, time);
         }
 
-        public int[] GetScores()
+        public Scores GetScores()
         {
             return scores;
+        }
+
+        public int GetScore(int playerId)
+        {
+            return scores.GetScore(playerId);
         }
     }
 }

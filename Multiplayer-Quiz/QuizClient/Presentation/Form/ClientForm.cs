@@ -1,11 +1,16 @@
-﻿using QuizClient.Networking;
+﻿using MaterialSkin.Controls;
+using QuizClient.Networking;
+using QuizShared.Game;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
+using System.Timers;
 using System.Windows.Forms;
 using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
+using Timer = System.Timers.Timer;
 
 namespace QuizClient
 {
@@ -15,21 +20,35 @@ namespace QuizClient
         private Panel currentPanel;
         private GamePanel currentGamePanel;
 
+        private NetworkHandler networkHandler;
+
+        private const int AMOUNT_OF_ANSWERS = 4;
+        private MaterialRaisedButton[] answersButtons = new MaterialRaisedButton[AMOUNT_OF_ANSWERS];
+        private int correctButton;
+
+        private Stopwatch stopwatch = new Stopwatch();
+        private Timer timer = new Timer();
+        private int seconds;
+
         public ClientForm()
         {
             InitializeComponent();
 
-            AddPanels();
+            AddPanelsAndButtons();
             SetPanel(GamePanel.Ip);
-
             ClientForm_Resize(null, null);
-        }
 
-        #region Form stuff
+            timer.Elapsed += OnTimedEvent;
+            timer.Interval = 1000;
+
+            networkHandler = new NetworkHandler(this);
+        }
 
         private void Form_Load(object sender, EventArgs e)
         {
         }
+        
+        #region Form Callbacks
 
         // Listener for the ip textbox
         private void IPTextBox_KeyDown(object sender, KeyEventArgs e)
@@ -41,26 +60,16 @@ namespace QuizClient
             e.SuppressKeyPress = true;
 
             string ipAddress = IPTextBox.Text;
-            if (!ValidateIPv4(ipAddress))
+            if (!NetworkHandler.ValidateIPv4(ipAddress))
             {
                 IPTextBox.Text = @"Invalid IP";
             }
             else
             {
                 // TODO: Try to connect with the server and handle succes and failure
-                // NetworkHandler networkHandler = new NetworkHandler();
-                // new Thread(networkHandler.RunClient).Start();
+                new Thread(networkHandler.RunClient).Start(IPTextBox.Text);
                 SetPanel(GamePanel.Lobby);
             }
-        }
-
-        // Checks whether or not the user input qualifies as an ip address
-        public bool ValidateIPv4(string ipString)
-        {
-            if (string.IsNullOrWhiteSpace(ipString))
-                return false;
-            string[] splitValues = ipString.Split('.');
-            return splitValues.Length == 4 && splitValues.All(r => byte.TryParse(r, out byte result));
         }
 
         // Centering the panels when the window gets resized
@@ -87,38 +96,6 @@ namespace QuizClient
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
-        #endregion Form stuff
-
-        // Adds all the panels to a list so that it can be iterated upon
-        private void AddPanels()
-        {
-            panels.Add(IPPanel);
-            panels.Add(LobbyPanel);
-            panels.Add(QuestionPanel);
-            panels.Add(WaitPanel);
-            panels.Add(ScoresPanel);
-
-            foreach (Panel panel in panels)
-                panel.Visible = false;
-        }
-
-        // Switches from one panel to another by making it visible and hiding the others
-        private void SetPanel(GamePanel panel)
-        {
-            foreach (Panel p in panels)
-                if (p.Name.ToLower().Contains(panel.ToString().ToLower()))
-                {
-                    if (currentPanel != null)
-                        currentPanel.Visible = false;
-                    currentPanel = p;
-                    currentPanel.Visible = true;
-                    currentGamePanel = panel;
-
-                    BackColor = currentPanel.BackColor;
-                    return;
-                }
-        }
-
         // Temporary N keypress to go to the next panel
         private void ClientForm_KeyDown(object sender, KeyEventArgs e)
         {
@@ -135,10 +112,195 @@ namespace QuizClient
             }
         }
 
+        private void AnswerButtonA_Click(object sender, EventArgs e)
+        {
+            OnQuestionAnswered(sender);
+        }
+
+        private void AnswerButtonB_Click(object sender, EventArgs e)
+        {
+            OnQuestionAnswered(sender);
+        }
+
+        private void AnswerButtonC_Click(object sender, EventArgs e)
+        {
+            OnQuestionAnswered(sender);
+        }
+
+        private void AnswerButtonD_Click(object sender, EventArgs e)
+        {
+            OnQuestionAnswered(sender);
+        }
+
+        private void HomeButton_Click(object sender, EventArgs e)
+        {
+            SetPanel(GamePanel.Ip);
+        }
+
+        #endregion Form Callbacks
+
+        #region Panel Logic
+
+        // Adds all the panels to a list so that it can be iterated upon
+        private void AddPanelsAndButtons()
+        {
+            panels.Add(IPPanel);
+            panels.Add(LobbyPanel);
+            panels.Add(QuestionPanel);
+            panels.Add(WaitPanel);
+            panels.Add(ScoresPanel);
+
+            foreach (Panel panel in panels)
+                panel.Visible = false;
+
+            int i = 0;
+            answersButtons[i++] = AnswerButtonA;
+            answersButtons[i++] = AnswerButtonB;
+            answersButtons[i++] = AnswerButtonC;
+            answersButtons[i] = AnswerButtonD;
+        }
+
+        // Switches from one panel to another by making it visible and hiding the others
+        private void SetPanel(GamePanel panel)
+        {
+            foreach (Panel p in panels)
+                if (p.Name.ToLower().Contains(panel.ToString().ToLower()))
+                {
+                    if (currentPanel != null)
+                        currentPanel.Visible = false;
+                    currentPanel = p;
+                    currentPanel.Visible = true;
+                    currentGamePanel = panel;
+
+                    BackColor = currentPanel.BackColor;
+                    break;
+                }
+
+            // Load events for specific panels
+            switch (currentGamePanel)
+            {
+                case GamePanel.Ip:
+                    IPTextBox.Text = NetworkHandler.GetLocalIPAddress().ToString();
+                    break;
+
+                case GamePanel.Lobby:
+                    break;
+
+                case GamePanel.Question:
+                    break;
+
+                case GamePanel.Wait:
+                    break;
+
+                case GamePanel.Scores:
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
         // Abstraction for selecting panels
         public enum GamePanel
         {
             Ip, Lobby, Question, Wait, Scores
         }
+
+        #endregion Panel Logic
+
+        #region Question Logic
+
+        public void HandleQuestionsScores(Tuple<Question, Scores> received)
+        {
+            // Go to question panel
+            SetPanel(GamePanel.Question);
+            Question question = received.Item1;
+            QuestionLabel.Text = question.GetQuestion();
+
+            // Generate random sequence
+            int[] sequence = new int[AMOUNT_OF_ANSWERS];
+            for (int i = 0; i < sequence.Length; i++)
+                sequence[i] = i;
+            Randomize(sequence);
+
+            // Place questions according to the random sequence
+            for (int i = 0; i < sequence.Length; i++)
+            {
+                if (i == 0)
+                    correctButton = sequence[i];
+                answersButtons[sequence[i]].Text = question.GetAnswers()[i];
+            }
+
+            // Display score
+            ScoreLabel.Text = received.Item2.GetScore(0).ToString();
+
+            // Set 10 second timer
+            seconds = 10;
+            CounterLabel.Text = seconds.ToString();
+            timer.Enabled = true;
+            stopwatch.Restart();
+        }
+
+        private void Randomize(int[] array)
+        {
+            Random rand = new Random();
+            for (int i = 0; i < array.Length - 1; i++)
+            {
+                int j = rand.Next(i, array.Length);
+                int temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+            }
+        }
+
+        private void OnTimedEvent(object sender, ElapsedEventArgs e)
+        {
+            seconds--;
+            Invoke(new Action(() => CounterLabel.Text = seconds.ToString()));
+
+            // If the timer is zero, continue to the next question
+            if (seconds > 0)
+                return;
+
+            timer.Enabled = false;
+            OnQuestionAnswered(null);
+        }
+
+        private void OnQuestionAnswered(object sender)
+        {
+            // Stop the stopwatch and timer
+            stopwatch.Stop();
+            timer.Enabled = false;
+
+            // Check which button was pressed
+            int answeredIndex = -1;
+            for (int i = 0; i < answersButtons.Length; i++)
+                if ((MaterialRaisedButton)sender == answersButtons[i])
+                    answeredIndex = i;
+
+            // Check if the answer is correct and send the time
+            if (answeredIndex == correctButton)
+                networkHandler.SendTime((int)stopwatch.ElapsedMilliseconds);
+            else
+                networkHandler.SendTime(-1);
+        }
+
+        #endregion Question Logic
+
+        #region Endgame Logic
+
+        public void HandleEndGame(Scores scores)
+        {
+            SetPanel(GamePanel.Scores);
+            ScoresFlowPanel.Controls.Clear();
+            for (int i = 0; i < scores.Size(); i++)
+            {
+                MaterialLabel score = new MaterialLabel();
+                score.Text = scores.GetScore(i).ToString();
+                ScoresFlowPanel.Controls.Add(score);
+            }
+        }
+
+        #endregion Endgame Logic
     }
 }

@@ -1,82 +1,51 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using QuizShared.Game;
+using QuizShared.Networking;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using QuizShared.Game;
-using QuizShared.Networking;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
 
 namespace QuizClient.Networking
 {
-    class NetworkHandler
+    internal class NetworkHandler
     {
         private TcpClient client;
+        private ClientForm form;
 
-        public void RunClient()
+        public NetworkHandler(ClientForm clientForm)
         {
-            client = new TcpClient(GetLocalIPAddress().ToString(), 6969);
+            form = clientForm;
+        }
+
+        public void RunClient(object ipAddress)
+        {
+            client = new TcpClient(ipAddress.ToString(), 6969);
 
             while (true)
             {
                 JObject received = TcpReadWrite.Read(client);
                 string command = (string)received["command"];
 
-                if (command == "questionScores")
+                switch (command)
                 {
-                    HandleQuestions(received);
-                    HandleScores(received);
-                    HandleAwnsers(received);
-
-                    //placeholder for score
-                    int time = 500;
-                    SendTime(500);
+                    case "questionScores":
+                        form.Invoke(new Action(() => form.HandleQuestionsScores(TcpProtocol.QuestionAndScoreParse(received))));
+                        break;
+                    case "endScores":
+                        form.Invoke(new Action(() => form.HandleEndGame(TcpProtocol.EndScoresParse(received))));
+                        client.Close();
+                        return;
                 }
-
-                
             }
         }
 
-        private string HandleQuestions(JObject data)
+        public void SendTime(int time)
         {
-            Question question;
-            question = TcpProtocol.ReadQuestionAndScore(data).Item1;
-
-            //For debugging
-            string Question = question.GetQuestion();
-            Console.WriteLine("Question: " + Question);
-
-            return Question;
+            TcpReadWrite.Write(client, TcpProtocol.TimeSend(time));
         }
 
-        private Scores HandleScores(JObject data)
-        {
-            Scores score = TcpProtocol.ReadQuestionAndScore(data).Item2;
-            //for debugging
-            score.ToString();
-
-            return score;
-        }
-
-        private List<string> HandleAwnsers(JObject data)
-        {
-            Question question;
-            question = TcpProtocol.ReadQuestionAndScore(data).Item1;
-
-            string[] awnser = question.GetAnswers();
-            List<string> awnsers = new List<string>();
-
-            for (int i = 0; i < 4; i++)
-            {
-                awnsers.Add(awnser[i]);
-                //for debugging
-                Console.WriteLine("Awnser: " + awnser[i]);
-            }
-                
-            return awnsers;
-        }
         public static IPAddress GetLocalIPAddress()
         {
             IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
@@ -85,27 +54,14 @@ namespace QuizClient.Networking
                     return ip;
             throw new Exception("No network adapters with an IPv4 address in the system!");
         }
-
-        private void SendTime(int time)
+        
+        // Checks whether or not the user input qualifies as an ip address
+        public static bool ValidateIPv4(string ipString)
         {
-            TcpReadWrite.Write(client, TcpProtocol.TimeSend(time));
-        }
-
-        private Scores ReadEndScore()
-        {
-            JObject recieved = TcpReadWrite.Read(client);
-            Scores score = TcpProtocol.EndScoresParse(recieved);
-            return score;
-        }
-
-        private bool ReadEndGame()
-        {
-            JObject received = TcpReadWrite.Read(client);
-            string command = (string)received["command"];
-
-            if (command == "endScores")
-                return true;
-            return false;
+            if (string.IsNullOrWhiteSpace(ipString))
+                return false;
+            string[] splitValues = ipString.Split('.');
+            return splitValues.Length == 4 && splitValues.All(r => byte.TryParse(r, out byte result));
         }
     }
 }

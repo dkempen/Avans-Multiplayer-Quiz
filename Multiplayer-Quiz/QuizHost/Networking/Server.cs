@@ -69,11 +69,15 @@ namespace Multiplayer_Quiz.Networking
             // Start game
             Console.WriteLine("Start Game!");
             List<Question> questions = new List<Question>();
-            string[] items = { "Item1", "Item2", "Item3", "Item4" };
-            string[] items2 = { "Item1", "Item2", "Item3", "Item4" };
-            questions.Add(new Question("A question?", items));
-            questions.Add(new Question("Is een banaan geel?", items2));
+            questions.Add(new Question("What is the first positive natural number?", new[]{ "1", "2", "3", "4" }));
+            questions.Add(new Question("What color is a banana?", new[]{ "Yellow", "Red", "Purple", "Pink" }));
+            questions.Add(new Question("What color is an orange?", new[] { "Orange", "Red", "Purple", "Pink" }));
             new GameSession(clients, questions);
+
+            // Game is done, close all connections
+            // TODO: Fix closing logic
+            foreach (TcpClient client in clients)
+                client.Close();
         }
 
         public static IPAddress GetLocalIPAddress()

@@ -41,14 +41,14 @@
             this.AnswerButtonC = new MaterialSkin.Controls.MaterialRaisedButton();
             this.InsideQuestionPanel = new System.Windows.Forms.TableLayoutPanel();
             this.CounterLabel = new MaterialSkin.Controls.MaterialLabel();
-            this.QuestionCountLabel = new MaterialSkin.Controls.MaterialLabel();
+            this.ScoreLabel = new MaterialSkin.Controls.MaterialLabel();
             this.QuestionLabel = new MaterialSkin.Controls.MaterialLabel();
             this.WaitPanel = new System.Windows.Forms.TableLayoutPanel();
             this.WaitLabel = new MaterialSkin.Controls.MaterialLabel();
             this.ScoresPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.ScoreLabel = new MaterialSkin.Controls.MaterialLabel();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.HomeButton = new MaterialSkin.Controls.MaterialRaisedButton();
+            this.ScoresLabel = new MaterialSkin.Controls.MaterialLabel();
+            this.ScoresFlowPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.LobbyPanel.SuspendLayout();
             this.IPPanel.SuspendLayout();
             this.QuestionPanel.SuspendLayout();
@@ -202,6 +202,7 @@
             this.AnswerButtonD.TabIndex = 3;
             this.AnswerButtonD.Text = "Answer D";
             this.AnswerButtonD.UseVisualStyleBackColor = true;
+            this.AnswerButtonD.Click += new System.EventHandler(this.AnswerButtonD_Click);
             // 
             // AnswerButtonB
             // 
@@ -220,6 +221,7 @@
             this.AnswerButtonB.TabIndex = 1;
             this.AnswerButtonB.Text = "Answer B";
             this.AnswerButtonB.UseVisualStyleBackColor = true;
+            this.AnswerButtonB.Click += new System.EventHandler(this.AnswerButtonB_Click);
             // 
             // AnswerButtonA
             // 
@@ -238,6 +240,7 @@
             this.AnswerButtonA.TabIndex = 0;
             this.AnswerButtonA.Text = "Answer A";
             this.AnswerButtonA.UseVisualStyleBackColor = true;
+            this.AnswerButtonA.Click += new System.EventHandler(this.AnswerButtonA_Click);
             // 
             // AnswerButtonC
             // 
@@ -256,6 +259,7 @@
             this.AnswerButtonC.TabIndex = 2;
             this.AnswerButtonC.Text = "Answer C";
             this.AnswerButtonC.UseVisualStyleBackColor = true;
+            this.AnswerButtonC.Click += new System.EventHandler(this.AnswerButtonC_Click);
             // 
             // InsideQuestionPanel
             // 
@@ -263,11 +267,11 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.InsideQuestionPanel.ColumnCount = 3;
-            this.InsideQuestionPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.InsideQuestionPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.InsideQuestionPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.InsideQuestionPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 94F));
+            this.InsideQuestionPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.InsideQuestionPanel.Controls.Add(this.CounterLabel, 2, 0);
-            this.InsideQuestionPanel.Controls.Add(this.QuestionCountLabel, 0, 0);
+            this.InsideQuestionPanel.Controls.Add(this.ScoreLabel, 0, 0);
             this.InsideQuestionPanel.Controls.Add(this.QuestionLabel, 1, 0);
             this.InsideQuestionPanel.Location = new System.Drawing.Point(23, 23);
             this.InsideQuestionPanel.Name = "InsideQuestionPanel";
@@ -292,20 +296,20 @@
             this.CounterLabel.Text = "Time left:\r\n10";
             this.CounterLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // QuestionCountLabel
+            // ScoreLabel
             // 
-            this.QuestionCountLabel.AutoSize = true;
-            this.QuestionCountLabel.Depth = 0;
-            this.QuestionCountLabel.Font = new System.Drawing.Font("Roboto", 11F);
-            this.QuestionCountLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.QuestionCountLabel.Location = new System.Drawing.Point(10, 10);
-            this.QuestionCountLabel.Margin = new System.Windows.Forms.Padding(10);
-            this.QuestionCountLabel.MouseState = MaterialSkin.MouseState.HOVER;
-            this.QuestionCountLabel.Name = "QuestionCountLabel";
-            this.QuestionCountLabel.Size = new System.Drawing.Size(39, 19);
-            this.QuestionCountLabel.TabIndex = 2;
-            this.QuestionCountLabel.Text = "3/12";
-            this.QuestionCountLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.ScoreLabel.AutoSize = true;
+            this.ScoreLabel.Depth = 0;
+            this.ScoreLabel.Font = new System.Drawing.Font("Roboto", 11F);
+            this.ScoreLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.ScoreLabel.Location = new System.Drawing.Point(10, 10);
+            this.ScoreLabel.Margin = new System.Windows.Forms.Padding(10);
+            this.ScoreLabel.MouseState = MaterialSkin.MouseState.HOVER;
+            this.ScoreLabel.Name = "ScoreLabel";
+            this.ScoreLabel.Size = new System.Drawing.Size(17, 19);
+            this.ScoreLabel.TabIndex = 2;
+            this.ScoreLabel.Text = "0";
+            this.ScoreLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // QuestionLabel
             // 
@@ -316,11 +320,11 @@
             this.QuestionLabel.Depth = 0;
             this.QuestionLabel.Font = new System.Drawing.Font("Roboto", 11F);
             this.QuestionLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.QuestionLabel.Location = new System.Drawing.Point(70, 10);
+            this.QuestionLabel.Location = new System.Drawing.Point(110, 10);
             this.QuestionLabel.Margin = new System.Windows.Forms.Padding(10);
             this.QuestionLabel.MouseState = MaterialSkin.MouseState.HOVER;
             this.QuestionLabel.Name = "QuestionLabel";
-            this.QuestionLabel.Size = new System.Drawing.Size(465, 189);
+            this.QuestionLabel.Size = new System.Drawing.Size(419, 189);
             this.QuestionLabel.TabIndex = 1;
             this.QuestionLabel.Text = "Question?";
             this.QuestionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -367,8 +371,8 @@
             this.ScoresPanel.ColumnCount = 1;
             this.ScoresPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.ScoresPanel.Controls.Add(this.HomeButton, 0, 2);
-            this.ScoresPanel.Controls.Add(this.ScoreLabel, 0, 0);
-            this.ScoresPanel.Controls.Add(this.flowLayoutPanel1, 0, 1);
+            this.ScoresPanel.Controls.Add(this.ScoresLabel, 0, 0);
+            this.ScoresPanel.Controls.Add(this.ScoresFlowPanel, 0, 1);
             this.ScoresPanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
             this.ScoresPanel.Location = new System.Drawing.Point(1030, 254);
             this.ScoresPanel.Name = "ScoresPanel";
@@ -379,33 +383,6 @@
             this.ScoresPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.ScoresPanel.Size = new System.Drawing.Size(178, 248);
             this.ScoresPanel.TabIndex = 5;
-            // 
-            // ScoreLabel
-            // 
-            this.ScoreLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ScoreLabel.AutoSize = true;
-            this.ScoreLabel.Depth = 0;
-            this.ScoreLabel.Font = new System.Drawing.Font("Roboto", 11F);
-            this.ScoreLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.ScoreLabel.Location = new System.Drawing.Point(30, 30);
-            this.ScoreLabel.Margin = new System.Windows.Forms.Padding(10);
-            this.ScoreLabel.MouseState = MaterialSkin.MouseState.HOVER;
-            this.ScoreLabel.Name = "ScoreLabel";
-            this.ScoreLabel.Size = new System.Drawing.Size(118, 19);
-            this.ScoreLabel.TabIndex = 5;
-            this.ScoreLabel.Text = "Scores";
-            this.ScoreLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // flowLayoutPanel1
-            // 
-            this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(23, 62);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(132, 100);
-            this.flowLayoutPanel1.TabIndex = 6;
             // 
             // HomeButton
             // 
@@ -424,6 +401,34 @@
             this.HomeButton.TabIndex = 7;
             this.HomeButton.Text = "Exit";
             this.HomeButton.UseVisualStyleBackColor = true;
+            this.HomeButton.Click += new System.EventHandler(this.HomeButton_Click);
+            // 
+            // ScoresLabel
+            // 
+            this.ScoresLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ScoresLabel.AutoSize = true;
+            this.ScoresLabel.Depth = 0;
+            this.ScoresLabel.Font = new System.Drawing.Font("Roboto", 11F);
+            this.ScoresLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.ScoresLabel.Location = new System.Drawing.Point(30, 30);
+            this.ScoresLabel.Margin = new System.Windows.Forms.Padding(10);
+            this.ScoresLabel.MouseState = MaterialSkin.MouseState.HOVER;
+            this.ScoresLabel.Name = "ScoresLabel";
+            this.ScoresLabel.Size = new System.Drawing.Size(118, 19);
+            this.ScoresLabel.TabIndex = 5;
+            this.ScoresLabel.Text = "Scores";
+            this.ScoresLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ScoresFlowPanel
+            // 
+            this.ScoresFlowPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ScoresFlowPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ScoresFlowPanel.Location = new System.Drawing.Point(23, 62);
+            this.ScoresFlowPanel.Name = "ScoresFlowPanel";
+            this.ScoresFlowPanel.Size = new System.Drawing.Size(132, 100);
+            this.ScoresFlowPanel.TabIndex = 6;
             // 
             // ClientForm
             // 
@@ -476,11 +481,11 @@
         private System.Windows.Forms.TableLayoutPanel InsideQuestionPanel;
         private MaterialSkin.Controls.MaterialLabel QuestionLabel;
         private MaterialSkin.Controls.MaterialLabel CounterLabel;
-        private MaterialSkin.Controls.MaterialLabel QuestionCountLabel;
+        private MaterialSkin.Controls.MaterialLabel ScoreLabel;
         private MaterialSkin.Controls.MaterialLabel WaitLabel;
         private System.Windows.Forms.TableLayoutPanel ScoresPanel;
-        private MaterialSkin.Controls.MaterialLabel ScoreLabel;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private MaterialSkin.Controls.MaterialLabel ScoresLabel;
+        private System.Windows.Forms.FlowLayoutPanel ScoresFlowPanel;
         private MaterialSkin.Controls.MaterialRaisedButton HomeButton;
     }
 }
