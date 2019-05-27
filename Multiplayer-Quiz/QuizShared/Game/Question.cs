@@ -6,7 +6,7 @@ namespace QuizShared.Game
 {
     public class Question
     {
-        private string question;
+        public string question { get; set; }
         private string[] answers; // First is always the correct answer
 
         public Question(string question, string[] answers)
@@ -23,6 +23,11 @@ namespace QuizShared.Game
         public string GetQuestion()
         {
             return question;
+        }
+
+        public override string ToString()
+        {
+            return this.question;
         }
     }
 }

@@ -6,25 +6,54 @@
              xmlns:local="clr-namespace:Multiplayer_Quiz.Presentation.WPF"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
+
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="#FFFFFCFC">
+    <Grid Background="#FFFFFCFC" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="123*"/>
             <ColumnDefinition Width="277*"/>
         </Grid.ColumnDefinitions>
         <Grid Height="41" VerticalAlignment="Top" Grid.ColumnSpan="2" Background="#FF555454">
-            <TextBlock Text="Host" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22" Foreground="#FFF9F9F9"></TextBlock>
+            <TextBlock Text="Host" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22" Foreground="#FFF9F9F9" Margin="290,6,464,6"></TextBlock>
+            <TextBlock x:Name="IPadressText" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Foreground="#FFF9F9F9" Margin="395,12,210,7" Width="195"><Run Text="IP-Adress: "/></TextBlock>
 
         </Grid>
         <Grid Width="247" HorizontalAlignment="Left" Grid.ColumnSpan="2" Background="#FF595656">
 
-            <ListView x:Name="QuestionListView" HorizontalAlignment="Left" Height="390" Margin="10,50,0,0" VerticalAlignment="Top" Width="222" Background="#FF555454">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Width="200" Header="Name" DisplayMemberBinding="{Binding question}" />
-                    </GridView>
-                </ListView.View>
+            <ListView x:Name="QuestionListView" HorizontalAlignment="Left" Height="344" Margin="10,96,0,0" VerticalAlignment="Top" Width="222" Background="#FF555454">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <WrapPanel>
+                            <TextBlock Text=""/>
+                            <TextBlock Text="{Binding question}"/>
+                        </WrapPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
             </ListView>
+
+            <Button Content="Edit" HorizontalAlignment="Left" Margin="127,10,0,0" VerticalAlignment="Top" Width="93" Height="25"/>
+
+            <TextBlock Text="Questions" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22" Foreground="#FFF9F9F9" Margin="69,49,35,371" Width="143"/>
+        </Grid>
+
+        <Button Content="Add" HorizontalAlignment="Left" Margin="20,10,0,0" VerticalAlignment="Top" Width="85" Height="25"/>
+        <Button Content="Start" Grid.Column="1" HorizontalAlignment="Left" Margin="383,10,0,0" VerticalAlignment="Top" Width="79" Height="22"/>
+        <Button x:Name="closeBtn" Click="CloseBtn_Click" Content="Close" Grid.Column="1" HorizontalAlignment="Left" Margin="469,10,0,0" VerticalAlignment="Top" Width="75" Height="22"/>
+        <Grid Grid.Column="1" HorizontalAlignment="Left" Height="409" Margin="1,41,0,0" VerticalAlignment="Top" Width="335" Background="#FF686565">
+            <ListView x:Name="QuestionListView_Copy" HorizontalAlignment="Left" Height="319" Margin="345,54,-197,0" VerticalAlignment="Top" Width="187" Background="#FF555454">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <WrapPanel>
+                            <TextBlock Text=""/>
+                            <TextBlock Text="{Binding question}"/>
+                        </WrapPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+        </Grid>
+        <Grid Grid.Column="1" HorizontalAlignment="Left" Height="409" Margin="336,41,0,0" VerticalAlignment="Top" Width="218" Background="#FF686565">
+            <TextBlock x:Name="totalClientsText" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Foreground="#FFF9F9F9" Margin="10,10,13,377" Width="195" Text="Total Clients:"/>
         </Grid>
 
     </Grid>

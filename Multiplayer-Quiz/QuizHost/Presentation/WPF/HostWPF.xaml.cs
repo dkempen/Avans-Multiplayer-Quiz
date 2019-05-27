@@ -29,5 +29,11 @@ namespace Multiplayer_Quiz.Presentation.WPF
         {
 
         }
+
+
+        private void CloseBtn_Click(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
