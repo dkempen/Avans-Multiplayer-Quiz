@@ -24,5 +24,16 @@ namespace Multiplayer_Quiz.Presentation.WPF
         {
             InitializeComponent();
         }
+
+        private void ListViewItem_Selected(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+
+        private void CloseBtn_Click(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

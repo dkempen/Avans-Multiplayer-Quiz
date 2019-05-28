@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Multiplayer_Quiz.Presentation.WPF;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ namespace Multiplayer_Quiz
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            
             Application.Run(new Form());
         }
     }
