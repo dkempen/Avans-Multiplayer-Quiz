@@ -13,6 +13,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using QuizShared.Game;
+using Multiplayer_Quiz.Networking;
 
 namespace Multiplayer_Quiz
 {
@@ -21,6 +23,7 @@ namespace Multiplayer_Quiz
     {
         
         WPF wpf = new WPF();
+        Server server = new Server();
 
         public Form()
         {
@@ -31,24 +34,17 @@ namespace Multiplayer_Quiz
             questions.Add(new Question("Welke kleur is een banaan",items1) { question = "Welke kleur is een banaan?"});
             wpf.QuestionListView.ItemsSource = questions;
 
-            wpf.IPadressText.Text = "IPadress: " + GetLocalIPAddress();
+            wpf.IPadressText.Text = "IPadress: " + LocalIPAddress();
         }
 
         private void Form_Load(object sender, EventArgs e)
         {
-
-        }
-
-    }
-}
-
-using QuizShared.Game;
-            Server server = new Server();
+            
             new Thread(server.RunServer).Start();
             elementHost1.Child = wpf;
         }
 
-        public static string GetLocalIPAddress()
+        public static string LocalIPAddress()
         {
             var host = Dns.GetHostEntry(Dns.GetHostName());
             foreach (var ip in host.AddressList)
@@ -59,3 +55,6 @@ using QuizShared.Game;
                 }
             }
             throw new Exception("No network adapters with an IPv4 address in the system!");
+        }
+       }
+}
