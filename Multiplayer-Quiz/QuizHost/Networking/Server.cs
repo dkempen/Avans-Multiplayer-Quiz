@@ -7,12 +7,15 @@ using System.Threading;
 
 namespace Multiplayer_Quiz.Networking
 {
-    internal class Server
+    public class Server
     {
-        private const int NUMBER_OF_PLAYERS = 1;
+        private const int NUMBER_OF_PLAYERS = 4;
 
         private TcpListener tcpListener;
         private List<TcpClient> clients = new List<TcpClient>();
+
+        public List<Question> questions = new List<Question>();
+        public bool startGameCommand = false;
 
         public void RunServer()
         {
@@ -32,13 +35,15 @@ namespace Multiplayer_Quiz.Networking
                 }
                 catch (SocketException)
                 {
-//                    Console.WriteLine("Timed out...");
+                    // Console.WriteLine("Timed out...");
                     // Check for start command
-                    if (1 != 1)
+                    if (startGameCommand)
                     {
                         StartGame();
                         return;
                     }
+
+                    // Start listening again because of timeout
                     tcpListener.Start();
                     continue;
                 }
@@ -63,16 +68,17 @@ namespace Multiplayer_Quiz.Networking
             }
         }
 
-        private void StartGame()
+        public void StartGame()
         {
             // TODO: Ping pong
             // Start game
             Console.WriteLine("Start Game!");
-            List<Question> questions = new List<Question>();
             questions.Add(new Question("What is the first positive natural number?", new[]{ "1", "2", "3", "4" }));
             questions.Add(new Question("What color is a banana?", new[]{ "Yellow", "Red", "Purple", "Pink" }));
             questions.Add(new Question("What color is an orange?", new[] { "Orange", "Red", "Purple", "Pink" }));
             new GameSession(clients, questions);
+
+            startGameCommand = false;
 
             // Game is done, close all connections
             // TODO: Fix closing logic

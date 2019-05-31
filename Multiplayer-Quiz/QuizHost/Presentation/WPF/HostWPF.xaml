@@ -37,7 +37,7 @@
         </Grid>
 
         <Button Content="Add" HorizontalAlignment="Left" Margin="20,10,0,0" VerticalAlignment="Top" Width="85" Height="25"/>
-        <Button Content="Start" Grid.Column="1" HorizontalAlignment="Left" Margin="383,10,0,0" VerticalAlignment="Top" Width="79" Height="22"/>
+        <Button x:Name="startBtn" Content="Start" Grid.Column="1" HorizontalAlignment="Left" Margin="383,10,0,0" VerticalAlignment="Top" Width="79" Height="22" Click="Button_Click"/>
         <Button x:Name="closeBtn" Click="CloseBtn_Click" Content="Close" Grid.Column="1" HorizontalAlignment="Left" Margin="469,10,0,0" VerticalAlignment="Top" Width="75" Height="22"/>
         <Grid Grid.Column="1" HorizontalAlignment="Left" Height="409" Margin="1,41,0,0" VerticalAlignment="Top" Width="335" Background="#FF686565">
             <ListView x:Name="QuestionListView_Copy" HorizontalAlignment="Left" Height="319" Margin="345,54,-197,0" VerticalAlignment="Top" Width="187" Background="#FF555454">

@@ -7,11 +7,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms.VisualStyles;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Multiplayer_Quiz.Networking;
 
 namespace Multiplayer_Quiz.Presentation.WPF
 {
@@ -20,9 +22,11 @@ namespace Multiplayer_Quiz.Presentation.WPF
     /// </summary>
     public partial class WPF : UserControl
     {
-        public WPF()
+        private Server server;
+        public WPF(Server server)
         {
             InitializeComponent();
+            this.server = server;
         }
 
         private void ListViewItem_Selected(object sender, RoutedEventArgs e)
@@ -33,7 +37,13 @@ namespace Multiplayer_Quiz.Presentation.WPF
 
         private void CloseBtn_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            server.startGameCommand = true;
+            Console.WriteLine("Clicked start");
         }
     }
 }

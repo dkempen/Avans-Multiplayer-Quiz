@@ -22,12 +22,13 @@ namespace Multiplayer_Quiz
     public partial class Form : System.Windows.Forms.Form
     {
         
-        WPF wpf = new WPF();
+        WPF wpf;
         Server server = new Server();
 
         public Form()
         {
             InitializeComponent();
+            wpf = new WPF(server);
             List<Question> questions = new List<Question>();
             //placeholder question
             string[] items1 = { "item1", "item1", "item1", "item1" };
@@ -39,7 +40,6 @@ namespace Multiplayer_Quiz
 
         private void Form_Load(object sender, EventArgs e)
         {
-            
             new Thread(server.RunServer).Start();
             elementHost1.Child = wpf;
         }
