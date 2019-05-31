@@ -48,7 +48,6 @@ namespace Multiplayer_Quiz.Presentation.WPF
         private void StartBtn_Click(object sender, RoutedEventArgs e)
         {
             server.startGameCommand = true;
-            Console.WriteLine("Clicked start");
         }
 
         private void ListViewItem_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -77,21 +76,38 @@ namespace Multiplayer_Quiz.Presentation.WPF
             }
         }
 
-        private void EditBtn_Click(object sender, RoutedEventArgs e)
+        private void AddBtn_Click(object sender, RoutedEventArgs e)
         {
             questions.Add(new Question("", new[] { "", "", "", "" }));
             QuestionListView.ItemsSource = questions;
-            ICollectionView view = CollectionViewSource.GetDefaultView(QuestionListView.ItemsSource);
-            view.Refresh();
+            RefreshListView();
         }
 
         private void RemoveBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (QuestionListView.SelectedItems.Count <= 0)
+                return;
+            var q = (Question) QuestionListView.SelectedItems[0];
+            questions.Remove(q);
+            RefreshListView();
         }
 
-        private void AddSaveBtn_Click(object sender, RoutedEventArgs e)
+        private void SaveBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (QuestionListView.SelectedItems.Count <= 0)
+                return;
+            var q = (Question) QuestionListView.SelectedItems[0];
 
+            string[] answers = {AnswerTextBox.Text, AnswerTextBox1.Text, AnswerTextBox2.Text, AnswerTextBox3.Text};
+            q.SetQuestion(QuestionTextBox.Text);
+            q.SetAnswer(answers);
+            RefreshListView();
+        }
+
+        private void RefreshListView()
+        {
+            var view = CollectionViewSource.GetDefaultView(QuestionListView.ItemsSource);
+            view.Refresh();
         }
     }
 }

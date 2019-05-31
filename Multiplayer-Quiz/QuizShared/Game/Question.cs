@@ -23,5 +23,15 @@ namespace QuizShared.Game
         {
             return question;
         }
+
+        public void SetQuestion(string question)
+        {
+            this.question = question;
+        }
+
+        public void SetAnswer(string[] answers)
+        {
+            this.answers = answers;
+        }
     }
 }
