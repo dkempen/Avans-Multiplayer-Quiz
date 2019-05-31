@@ -78,11 +78,6 @@ namespace Multiplayer_Quiz.Networking
                 gameLogic.GetScore(client.id);
                 client.Write(TcpProtocol.EndScoresSend(gameLogic.GetScores()));
             }
-
-            // Kick all
-            foreach (ClientHandler client in clientHandlers)
-                client.Close();
-            clientHandlers.Clear();
         }
 
         private void Broadcast(JObject message)

@@ -35,6 +35,7 @@ namespace QuizClient.Networking
                         break;
                     case "endScores":
                         form.Invoke(new Action(() => form.HandleEndGame(TcpProtocol.EndScoresParse(received))));
+                        client.GetStream().Close();
                         client.Close();
                         return;
                 }

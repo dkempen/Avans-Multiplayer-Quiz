@@ -16,11 +16,18 @@ namespace Multiplayer_Quiz.Networking
 
         public List<Question> questions = new List<Question>();
         public bool startGameCommand = false;
+        private Form form;
 
-        public void RunServer()
+        public Server(Form form)
+        {
+            this.form = form;
+        }
+
+        public void RunServer(List<Question> questions)
         {
             tcpListener = new TcpListener(GetLocalIPAddress(), 6969);
             tcpListener.Start();
+            form.SetNumberOfPlayerText(clients.Count);
 
             while (true)
             {
@@ -39,8 +46,8 @@ namespace Multiplayer_Quiz.Networking
                     // Check for start command
                     if (startGameCommand)
                     {
-                        StartGame();
-                        return;
+                        StartGame(questions);
+//                        return;
                     }
 
                     // Start listening again because of timeout
@@ -53,6 +60,7 @@ namespace Multiplayer_Quiz.Networking
                 {
                     // Add to client list
                     clients.Add(client);
+                    form.SetNumberOfPlayerText(clients.Count);
                 }
                 else
                 {
@@ -62,28 +70,29 @@ namespace Multiplayer_Quiz.Networking
                 // check for start command
                 if (clients.Count == NUMBER_OF_PLAYERS)
                 {
-                    StartGame();
-                    return;
+                    StartGame(questions);
+//                    return;
                 }
             }
         }
 
-        public void StartGame()
+        public void StartGame(List<Question> questions)
         {
             // TODO: Ping pong
             // Start game
             Console.WriteLine("Start Game!");
-            questions.Add(new Question("What is the first positive natural number?", new[]{ "1", "2", "3", "4" }));
-            questions.Add(new Question("What color is a banana?", new[]{ "Yellow", "Red", "Purple", "Pink" }));
-            questions.Add(new Question("What color is an orange?", new[] { "Orange", "Red", "Purple", "Pink" }));
             new GameSession(clients, questions);
-
+            
             startGameCommand = false;
 
             // Game is done, close all connections
-            // TODO: Fix closing logic
             foreach (TcpClient client in clients)
+            {
+                client.GetStream().Close();
                 client.Close();
+            }
+            clients.Clear();
+            form.SetNumberOfPlayerText(clients.Count);
         }
 
         public static IPAddress GetLocalIPAddress()

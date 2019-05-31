@@ -21,40 +21,46 @@
         <Grid Width="247" HorizontalAlignment="Left" Grid.ColumnSpan="2" Background="#FF595656">
 
             <ListView x:Name="QuestionListView" HorizontalAlignment="Left" Height="344" Margin="10,96,0,0" VerticalAlignment="Top" Width="222" Background="#FF555454">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ListViewItem_PreviewMouseLeftButtonDown" />
+                        <EventSetter Event="PreviewMouseLeftButtonUp" Handler="ListViewItem_PreviewMouseLeftButtonUp" />
+                    </Style>
+                </ListView.ItemContainerStyle>
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <WrapPanel>
                             <TextBlock Text=""/>
-                            <TextBlock Text="{Binding question}"/>
+                            <TextBlock x:Name="QuestionDataName" Text="{Binding question}"/>
                         </WrapPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
 
-            <Button Content="Edit" HorizontalAlignment="Left" Margin="127,10,0,0" VerticalAlignment="Top" Width="93" Height="25"/>
+            <Button x:Name="EditBtn" Content="Edit" HorizontalAlignment="Left" Margin="127,10,0,0" VerticalAlignment="Top" Width="93" Height="25" Click="EditBtn_Click"/>
 
             <TextBlock Text="Questions" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22" Foreground="#FFF9F9F9" Margin="69,49,35,371" Width="143"/>
         </Grid>
 
-        <Button Content="Add" HorizontalAlignment="Left" Margin="20,10,0,0" VerticalAlignment="Top" Width="85" Height="25"/>
-        <Button x:Name="startBtn" Content="Start" Grid.Column="1" HorizontalAlignment="Left" Margin="383,10,0,0" VerticalAlignment="Top" Width="79" Height="22" Click="Button_Click"/>
+        <Button x:Name="RemoveBtn" Content="Remove" HorizontalAlignment="Left" Margin="20,10,0,0" VerticalAlignment="Top" Width="85" Height="25" Click="RemoveBtn_Click"/>
+        <Button x:Name="startBtn" Content="Start" Grid.Column="1" HorizontalAlignment="Left" Margin="383,10,0,0" VerticalAlignment="Top" Width="79" Height="22" Click="StartBtn_Click"/>
         <Button x:Name="closeBtn" Click="CloseBtn_Click" Content="Close" Grid.Column="1" HorizontalAlignment="Left" Margin="469,10,0,0" VerticalAlignment="Top" Width="75" Height="22"/>
-        <Grid Grid.Column="1" HorizontalAlignment="Left" Height="409" Margin="1,41,0,0" VerticalAlignment="Top" Width="335" Background="#FF686565">
-            <ListView x:Name="QuestionListView_Copy" HorizontalAlignment="Left" Height="319" Margin="345,54,-197,0" VerticalAlignment="Top" Width="187" Background="#FF555454">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <WrapPanel>
-                            <TextBlock Text=""/>
-                            <TextBlock Text="{Binding question}"/>
-                        </WrapPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+        <Grid x:Name="EditGrid" Grid.Column="1" HorizontalAlignment="Left" Height="409" Margin="1,41,0,0" VerticalAlignment="Top" Width="335" Background="#FF686565">
+            <TextBox x:Name="QuestionTextBox" HorizontalAlignment="Left" Height="23" Margin="155,45,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+            <TextBox x:Name="AnswerTextBox" HorizontalAlignment="Left" Height="23" Margin="155,89,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+            <TextBox x:Name="AnswerTextBox1" HorizontalAlignment="Left" Height="23" Margin="155,133,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.993,0.344"/>
+            <TextBox x:Name="AnswerTextBox2" HorizontalAlignment="Left" Height="23" Margin="155,177,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+            <TextBox x:Name="AnswerTextBox3" HorizontalAlignment="Left" Height="23" Margin="155,224,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+            <Label x:Name="QuestionLabel" Content="Question:" HorizontalAlignment="Left" Margin="65,45,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.348,0.351" Height="23"/>
+            <Label x:Name="AnswerLabel" Content="Correct Answer:" HorizontalAlignment="Left" Margin="50,89,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.348,0.351" Height="23" Width="92"/>
+            <Label x:Name="AnswerLabel1" Content="Answer:" HorizontalAlignment="Left" Margin="65,133,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.348,0.351" Height="23"/>
+            <Label x:Name="AnswerLabel2" Content="Answer:" HorizontalAlignment="Left" Margin="65,177,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.348,0.351" Height="23"/>
+            <Label x:Name="AnswerLabel3" Content="Answer:" HorizontalAlignment="Left" Margin="65,224,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.348,0.351" Height="23"/>
+            <Button x:Name="SaveBtn" Content="Save" HorizontalAlignment="Left" Margin="226,330,0,0" VerticalAlignment="Top" Width="75"/>
 
         </Grid>
         <Grid Grid.Column="1" HorizontalAlignment="Left" Height="409" Margin="336,41,0,0" VerticalAlignment="Top" Width="218" Background="#FF686565">
             <TextBlock x:Name="totalClientsText" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Foreground="#FFF9F9F9" Margin="10,10,13,377" Width="195" Text="Total Clients:"/>
         </Grid>
-
     </Grid>
 </UserControl>

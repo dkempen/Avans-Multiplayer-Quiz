@@ -23,24 +23,26 @@ namespace Multiplayer_Quiz
     {
         
         WPF wpf;
-        Server server = new Server();
+        Server server;
+        private List<Question> questions = new List<Question>();
 
         public Form()
         {
+            server = new Server(this);
             InitializeComponent();
-            wpf = new WPF(server);
-            List<Question> questions = new List<Question>();
-            //placeholder question
-            string[] items1 = { "item1", "item1", "item1", "item1" };
-            questions.Add(new Question("Welke kleur is een banaan",items1) { question = "Welke kleur is een banaan?"});
-            wpf.QuestionListView.ItemsSource = questions;
-
+            wpf = new WPF(server, questions);
+            
             wpf.IPadressText.Text = "IPadress: " + LocalIPAddress();
         }
 
         private void Form_Load(object sender, EventArgs e)
         {
-            new Thread(server.RunServer).Start();
+            questions.Add(new Question("What is the first positive natural number?", new[] { "1", "2", "3", "4" }));
+            questions.Add(new Question("What color is a banana?", new[] { "Yellow", "Red", "Purple", "Pink" }));
+            questions.Add(new Question("What color is an orange?", new[] { "Orange", "Red", "Purple", "Pink" }));
+            SetQuestionListData();
+
+            new Thread(() => server.RunServer(questions)).Start();
             elementHost1.Child = wpf;
         }
 
@@ -56,5 +58,21 @@ namespace Multiplayer_Quiz
             }
             throw new Exception("No network adapters with an IPv4 address in the system!");
         }
-       }
+
+        public void SetNumberOfPlayerText(int amount)
+        {
+            Invoke(new Action(() => wpf.totalClientsText.Text = "Total Clients: " + amount.ToString()));
+        }
+
+        public void SetQuestionListData()
+        {
+            List<Question> Questions = new List<Question>();
+            foreach (Question Question in questions)
+            {
+                Questions.Add(new Question(Question.GetQuestion(),Question.GetAnswers()) {question = Question.GetQuestion()});
+            }
+
+            Invoke(new Action(() => wpf.QuestionListView.ItemsSource = Questions));
+        }
+    }
 }
