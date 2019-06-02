@@ -16,8 +16,9 @@ namespace Multiplayer_Quiz.Networking
         private List<ClientHandler> clientHandlers = new List<ClientHandler>();
         private List<Question> questions;
         private List<int> ids = new List<int>();
+        private Form form;
 
-        public GameSession(List<TcpClient> clients, List<Question> questions)
+        public GameSession(List<TcpClient> clients, List<Question> questions,Form form)
         {
             int id = 0;
             foreach (TcpClient client in clients)
@@ -26,6 +27,7 @@ namespace Multiplayer_Quiz.Networking
                 ids.Add(id++);
             }
             this.questions = questions;
+            this.form = form;
 
             StartGame();
         }
@@ -34,7 +36,8 @@ namespace Multiplayer_Quiz.Networking
         {
             // Intis
             int players = clientHandlers.Count();
-
+            form.gameStarted = true;
+            form.setGameStarted();
             gameLogic = new GameLogic(questions, players, ids);
             Question currentQuestion;
 
@@ -50,6 +53,8 @@ namespace Multiplayer_Quiz.Networking
                 if (currentQuestion == null)
                 {
                     EndGame();
+                    form.gameStarted = false;
+                    form.setGameStarted();
                     return;
                 }
 
@@ -91,9 +96,5 @@ namespace Multiplayer_Quiz.Networking
                 client.Write(message);
         }
 
-        private void ShowQuestion(Question question, int[] scores)
-        {
-
-        }
     }
 }

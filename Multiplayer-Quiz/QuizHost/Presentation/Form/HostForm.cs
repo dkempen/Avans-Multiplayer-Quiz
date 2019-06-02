@@ -25,6 +25,7 @@ namespace Multiplayer_Quiz
         WPF wpf;
         Server server;
         private List<Question> questions = new List<Question>();
+        public bool gameStarted = false;
 
         public Form()
         {
@@ -33,6 +34,7 @@ namespace Multiplayer_Quiz
             wpf = new WPF(server, questions);
             
             wpf.IPadressText.Text = "IPadress: " + LocalIPAddress();
+            wpf.inGameLabel.Visibility = Visibility.Hidden;
         }
 
         private void Form_Load(object sender, EventArgs e)
@@ -62,6 +64,20 @@ namespace Multiplayer_Quiz
         public void SetNumberOfPlayerText(int amount)
         {
             Invoke(new Action(() => wpf.totalClientsText.Text = "Total Clients: " + amount.ToString()));
+        }
+
+        public void setGameStarted()
+        {
+            if (gameStarted)
+            {
+                Invoke(new Action(() => wpf.startBtn.Visibility = Visibility.Hidden));
+                Invoke(new Action(() => wpf.inGameLabel.Visibility = Visibility.Visible));
+            }
+            else
+            {
+                Invoke(new Action(() => wpf.startBtn.Visibility = Visibility.Visible));
+                Invoke(new Action(() => wpf.inGameLabel.Visibility = Visibility.Hidden));
+            }
         }
 
         public void SetQuestionListData()

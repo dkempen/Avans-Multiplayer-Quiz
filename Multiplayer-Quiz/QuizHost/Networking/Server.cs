@@ -46,8 +46,7 @@ namespace Multiplayer_Quiz.Networking
                     // Check for start command
                     if (startGameCommand && clients.Count > 0)
                     {
-                        StartGame(questions);
-//                        return;
+                        StartGame(questions);                    
                     }
 
                     // Start listening again because of timeout
@@ -71,7 +70,6 @@ namespace Multiplayer_Quiz.Networking
                 if (clients.Count == NUMBER_OF_PLAYERS)
                 {
                     StartGame(questions);
-//                    return;
                 }
             }
         }
@@ -81,7 +79,7 @@ namespace Multiplayer_Quiz.Networking
             // TODO: Ping pong
             // Start game
             Console.WriteLine("Start Game!");
-            new GameSession(clients, questions);
+            new GameSession(clients, questions,form);
             
             startGameCommand = false;
 

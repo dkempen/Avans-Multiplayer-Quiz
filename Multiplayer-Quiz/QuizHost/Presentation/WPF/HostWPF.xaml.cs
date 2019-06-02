@@ -62,7 +62,7 @@ namespace Multiplayer_Quiz.Presentation.WPF
             }
         }
 
-        private void ListViewItem_PreviewMouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void ListViewItem_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             ListViewItem item = sender as ListViewItem;
             if (item != null && item.IsSelected)
@@ -78,7 +78,7 @@ namespace Multiplayer_Quiz.Presentation.WPF
 
         private void AddBtn_Click(object sender, RoutedEventArgs e)
         {
-            questions.Add(new Question("", new[] { "", "", "", "" }));
+            questions.Add(new Question("Needs to Edited", new[] { "", "", "", "" }));
             QuestionListView.ItemsSource = questions;
             RefreshListView();
         }
@@ -87,8 +87,9 @@ namespace Multiplayer_Quiz.Presentation.WPF
         {
             if (QuestionListView.SelectedItems.Count <= 0)
                 return;
-            var q = (Question) QuestionListView.SelectedItems[0];
+            Question q = (Question) QuestionListView.SelectedItems[0];
             questions.Remove(q);
+            QuestionListView.ItemsSource = questions;
             RefreshListView();
         }
 
@@ -109,5 +110,6 @@ namespace Multiplayer_Quiz.Presentation.WPF
             var view = CollectionViewSource.GetDefaultView(QuestionListView.ItemsSource);
             view.Refresh();
         }
+
     }
 }

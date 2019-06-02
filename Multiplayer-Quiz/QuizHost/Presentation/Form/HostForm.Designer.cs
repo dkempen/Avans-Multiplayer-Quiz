@@ -47,7 +47,7 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.elementHost1);
             this.Name = "Form";
-            this.Text = "7";
+            this.Text = "Host";
             this.Load += new System.EventHandler(this.Form_Load);
             this.ResumeLayout(false);
 

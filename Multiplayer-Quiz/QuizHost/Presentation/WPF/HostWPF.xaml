@@ -8,14 +8,16 @@
              mc:Ignorable="d" 
 
              d:DesignHeight="450" d:DesignWidth="800">
+
     <Grid Background="#FFFFFCFC" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="123*"/>
             <ColumnDefinition Width="277*"/>
         </Grid.ColumnDefinitions>
         <Grid Height="41" VerticalAlignment="Top" Grid.ColumnSpan="2" Background="#FF555454">
-            <TextBlock Text="Host" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22" Foreground="#FFF9F9F9" Margin="290,6,464,6"></TextBlock>
-            <TextBlock x:Name="IPadressText" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Foreground="#FFF9F9F9" Margin="395,12,210,7" Width="195"><Run Text="IP-Adress: "/></TextBlock>
+            <TextBlock Text="Host" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22" Foreground="#FFF9F9F9" Margin="263,8,491,8" FontFamily="Arial" RenderTransformOrigin="0.156,0.36"></TextBlock>
+            <TextBlock x:Name="IPadressText" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Foreground="#FFF9F9F9" Margin="374,10,186,8" Width="240" FontFamily="Arial"><Run Text="IP-Adress: "/></TextBlock>
+            <TextBlock x:Name="inGameLabel" Text="In-Game" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Foreground="#FF258D38" Margin="663,10,22,8" Width="115" FontFamily="Arial"/>
 
         </Grid>
         <Grid Width="247" HorizontalAlignment="Left" Grid.ColumnSpan="2" Background="#FF595656">
@@ -26,38 +28,41 @@
                         <Setter Property="IsSelected" Value="{Binding IsGroovy}"/>
                         <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ListViewItem_PreviewMouseLeftButtonDown" />
                         <EventSetter Event="PreviewMouseLeftButtonUp" Handler="ListViewItem_PreviewMouseLeftButtonUp" />
+
                     </Style>
                 </ListView.ItemContainerStyle>
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <WrapPanel>
                             <TextBlock Text=""/>
-                            <TextBlock x:Name="QuestionDataName" Text="{Binding question}"/>
+                            <TextBlock x:Name="QuestionDataName" Text="{Binding question}" Height="20" Foreground="White" FontFamily="Arial" FontSize="10"/>
                         </WrapPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
 
-            <Button x:Name="AddBtn" Content="Add" HorizontalAlignment="Left" Margin="127,10,0,0" VerticalAlignment="Top" Width="93" Height="25" Click="AddBtn_Click"/>
+            <Button  x:Name="AddBtn" Content="Add" HorizontalAlignment="Left" Margin="127,10,0,0" VerticalAlignment="Top" Width="100" Height="25" Click="AddBtn_Click" Background="Transparent" Foreground="White" FontFamily="Arial" FontSize="18">
 
-            <TextBlock Text="Questions" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22" Foreground="#FFF9F9F9" Margin="69,49,35,371" Width="143"/>
+            </Button>
+
+            <TextBlock Text="Questions" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22" Foreground="#FFF9F9F9" Margin="69,49,35,371" Width="143" FontFamily="Arial"/>
         </Grid>
 
-        <Button x:Name="RemoveBtn" Content="Remove" HorizontalAlignment="Left" Margin="20,10,0,0" VerticalAlignment="Top" Width="85" Height="25" Click="RemoveBtn_Click"/>
-        <Button x:Name="startBtn" Content="Start" Grid.Column="1" HorizontalAlignment="Left" Margin="383,10,0,0" VerticalAlignment="Top" Width="79" Height="22" Click="StartBtn_Click"/>
-        <Button x:Name="closeBtn" Click="CloseBtn_Click" Content="Close" Grid.Column="1" HorizontalAlignment="Left" Margin="469,10,0,0" VerticalAlignment="Top" Width="75" Height="22"/>
+        <Button x:Name="RemoveBtn"   Content="Remove" HorizontalAlignment="Left" Margin="20,10,0,0" VerticalAlignment="Top" Width="85" Height="25" Click="RemoveBtn_Click" Background="Transparent" Foreground="White" FontFamily="Arial" FontSize="18"/>
+
+        <Button x:Name="startBtn" Content="Start" Grid.Column="1" HorizontalAlignment="Left" Margin="451,10,0,0" VerticalAlignment="Top" Width="93" Height="26" Click="StartBtn_Click" Background="Transparent" Foreground="White" FontFamily="Arial" FontSize="18" />
         <Grid x:Name="EditGrid" Grid.Column="1" HorizontalAlignment="Left" Height="409" Margin="1,41,0,0" VerticalAlignment="Top" Width="335" Background="#FF686565">
-            <TextBox x:Name="QuestionTextBox" HorizontalAlignment="Left" Height="23" Margin="155,45,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-            <TextBox x:Name="AnswerTextBox" HorizontalAlignment="Left" Height="23" Margin="155,89,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-            <TextBox x:Name="AnswerTextBox1" HorizontalAlignment="Left" Height="23" Margin="155,133,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.993,0.344"/>
-            <TextBox x:Name="AnswerTextBox2" HorizontalAlignment="Left" Height="23" Margin="155,177,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-            <TextBox x:Name="AnswerTextBox3" HorizontalAlignment="Left" Height="23" Margin="155,224,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-            <Label x:Name="QuestionLabel" Content="Question:" HorizontalAlignment="Left" Margin="65,45,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.348,0.351" Height="23"/>
-            <Label x:Name="AnswerLabel" Content="Correct Answer:" HorizontalAlignment="Left" Margin="50,89,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.348,0.351" Height="23" Width="92"/>
-            <Label x:Name="AnswerLabel1" Content="Answer:" HorizontalAlignment="Left" Margin="65,133,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.348,0.351" Height="23"/>
-            <Label x:Name="AnswerLabel2" Content="Answer:" HorizontalAlignment="Left" Margin="65,177,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.348,0.351" Height="23"/>
-            <Label x:Name="AnswerLabel3" Content="Answer:" HorizontalAlignment="Left" Margin="65,224,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.348,0.351" Height="23"/>
-            <Button x:Name="SaveBtn" Content="Save" HorizontalAlignment="Left" Margin="226,330,0,0" VerticalAlignment="Top" Width="93" Click="SaveBtn_Click" Height="31"/>
+            <TextBox x:Name="QuestionTextBox" HorizontalAlignment="Left" Height="23" Margin="85,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="234" Background="#FF686565" Foreground="White" FontFamily="Arial"/>
+            <TextBox x:Name="AnswerTextBox" HorizontalAlignment="Left" Height="23" Margin="122,89,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="197" Background="#FF686565" FontFamily="Arial" Foreground="White" FontSize="14"/>
+            <TextBox x:Name="AnswerTextBox1" HorizontalAlignment="Left" Height="23" Margin="76,133,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="243" RenderTransformOrigin="0.993,0.344" Background="#FF686565" Foreground="White" FontSize="14"/>
+            <TextBox x:Name="AnswerTextBox2" HorizontalAlignment="Left" Height="23" Margin="76,177,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="243" Background="#FF686565" Foreground="White" FontFamily="Arial" FontSize="14"/>
+            <TextBox x:Name="AnswerTextBox3" HorizontalAlignment="Left" Height="23" Margin="76,224,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="243" Background="#FF686565" Foreground="White" FontFamily="Arial" FontSize="14"/>
+            <Label x:Name="QuestionLabel" Content="Question:" HorizontalAlignment="Left" Margin="10,45,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.348,0.351" Height="23" Foreground="White" FontFamily="Arial" FontSize="14"/>
+            <Label x:Name="AnswerLabel" Content="Correct Answer:" HorizontalAlignment="Left" Margin="10,89,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.348,0.351" Height="23" Width="112" Foreground="White" FontSize="14" FontFamily="Arial"/>
+            <Label x:Name="AnswerLabel1" Content="Answer:" HorizontalAlignment="Left" Margin="10,133,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.348,0.351" Height="23" Foreground="White" FontSize="14" FontFamily="Arial"/>
+            <Label x:Name="AnswerLabel2" Content="Answer:" HorizontalAlignment="Left" Margin="10,177,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.348,0.351" Height="23" Foreground="White" FontSize="14" FontFamily="Arial"/>
+            <Label x:Name="AnswerLabel3" Content="Answer:" HorizontalAlignment="Left" Margin="10,224,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.348,0.351" Height="23" Foreground="White" FontSize="14" FontFamily="Arial"/>
+            <Button x:Name="SaveBtn" Content="Save" HorizontalAlignment="Left" Margin="20,332,0,0" VerticalAlignment="Top" Width="290" Click="SaveBtn_Click" Height="31" Background="Transparent" Foreground="White" FontFamily="Arial" FontSize="18" />
 
         </Grid>
         <Grid Grid.Column="1" HorizontalAlignment="Left" Height="409" Margin="336,41,0,0" VerticalAlignment="Top" Width="218" Background="#FF686565">
