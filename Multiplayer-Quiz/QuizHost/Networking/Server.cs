@@ -44,7 +44,7 @@ namespace Multiplayer_Quiz.Networking
                 {
                     // Console.WriteLine("Timed out...");
                     // Check for start command
-                    if (startGameCommand)
+                    if (startGameCommand && clients.Count > 0)
                     {
                         StartGame(questions);
 //                        return;

@@ -2,6 +2,7 @@
 using QuizClient.Networking;
 using QuizShared.Game;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -240,6 +241,9 @@ namespace QuizClient
             CounterLabel.Text = seconds.ToString();
             timer.Enabled = true;
             stopwatch.Restart();
+
+            // Enable all buttons
+            enableButtons(true);
         }
 
         public int getID(int id)
@@ -250,7 +254,7 @@ namespace QuizClient
 
         private void Randomize(int[] array)
         {
-            Random rand = new Random();
+            Random rand = new Random(Guid.NewGuid().GetHashCode());
             for (int i = 0; i < array.Length - 1; i++)
             {
                 int j = rand.Next(i, array.Length);
@@ -275,6 +279,9 @@ namespace QuizClient
 
         private void OnQuestionAnswered(object sender)
         {
+            // Disable all buttons
+            enableButtons(false);
+
             // Stop the stopwatch and timer
             stopwatch.Stop();
             timer.Enabled = false;
@@ -292,6 +299,11 @@ namespace QuizClient
                 networkHandler.SendTime(-1);
         }
 
+        private void enableButtons(bool enable)
+        {
+            foreach (var button in answersButtons)
+                button.Enabled = enable;
+        }
         #endregion Question Logic
 
         #region Endgame Logic
@@ -300,11 +312,17 @@ namespace QuizClient
         {
             SetPanel(GamePanel.Scores);
             ScoresFlowPanel.Controls.Clear();
-            for (int i = 0; i < scores.Size(); i++)
+
+            var sorted = new Dictionary<int, int>();
+            for (var i = 0; i < scores.Size(); i++)
+                sorted.Add(i, scores.GetScore(i));
+
+            foreach (var score in sorted.OrderByDescending(key => key.Value))
             {
-                MaterialLabel score = new MaterialLabel();
-                score.Text = scores.GetScore(i).ToString();
-                ScoresFlowPanel.Controls.Add(score);
+                var scoreLabel = new MaterialLabel {Text = score.Key + @": " + score.Value};
+                ScoresFlowPanel.Controls.Add(scoreLabel);
+                if (score.Key == id)
+                    scoreLabel.Font = new Font(scoreLabel.Font, FontStyle.Bold);
             }
         }
 
