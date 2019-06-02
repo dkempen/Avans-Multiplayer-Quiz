@@ -14,6 +14,7 @@ namespace QuizClient.Networking
         private TcpClient client;
         private ClientForm form;
 
+
         public NetworkHandler(ClientForm clientForm)
         {
             form = clientForm;
@@ -30,6 +31,9 @@ namespace QuizClient.Networking
 
                 switch (command)
                 {
+                    case "id":
+                        form.Invoke(new Action(() => form.getID(TcpProtocol.ReadID(received))));
+                        break;
                     case "questionScores":
                         form.Invoke(new Action(() => form.HandleQuestionsScores(TcpProtocol.QuestionAndScoreParse(received))));
                         break;

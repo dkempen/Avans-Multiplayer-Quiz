@@ -36,6 +36,21 @@ namespace QuizShared.Networking
             };
         }
 
+        public static JObject SendID(int id)
+        {
+            return new JObject
+            {
+                {"command","id"},
+                {"id",id }
+            };
+
+        }
+
+        public static int ReadID(JObject json)
+        {
+            return JsonConvert.DeserializeObject<int>((string)json["id"]);
+        }
+
         public static Tuple<Question, Scores> QuestionScoresParse(JObject json)
         {
             return new Tuple<Question, Scores>(

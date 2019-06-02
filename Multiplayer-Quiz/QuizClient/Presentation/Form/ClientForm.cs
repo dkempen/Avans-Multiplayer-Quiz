@@ -29,6 +29,7 @@ namespace QuizClient
         private Stopwatch stopwatch = new Stopwatch();
         private Timer timer = new Timer();
         private int seconds;
+        private int id;
 
         public ClientForm()
         {
@@ -232,13 +233,19 @@ namespace QuizClient
             }
 
             // Display score
-            ScoreLabel.Text = received.Item2.GetScore(0).ToString();
+            ScoreLabel.Text = received.Item2.GetScore(getID(id)).ToString();
 
             // Set 10 second timer
             seconds = 10;
             CounterLabel.Text = seconds.ToString();
             timer.Enabled = true;
             stopwatch.Restart();
+        }
+
+        public int getID(int id)
+        {
+            this.id = id;
+            return this.id;
         }
 
         private void Randomize(int[] array)

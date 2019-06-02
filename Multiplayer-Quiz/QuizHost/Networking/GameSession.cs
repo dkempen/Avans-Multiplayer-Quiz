@@ -38,6 +38,11 @@ namespace Multiplayer_Quiz.Networking
             gameLogic = new GameLogic(questions, players, ids);
             Question currentQuestion;
 
+            foreach (ClientHandler client in clientHandlers)
+            {
+                client.Write(TcpProtocol.SendID(client.id));
+            }
+
             // Start the game loop
             while (true)
             {
