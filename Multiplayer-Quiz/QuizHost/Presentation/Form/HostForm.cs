@@ -99,11 +99,11 @@ namespace Multiplayer_Quiz
         public List<Question> ReadQuestionsFromDatabase()
         {
             IFormatter formatter = new BinaryFormatter();
-            Stream stream = new FileStream(@"D:\DataBase.txt", FileMode.Open, FileAccess.Read);
-            List<Question> Questions = new List<Question>();
-
-            Questions = (List<Question>) formatter.Deserialize(stream);
-            return Questions;
+            Stream stream = new FileStream(AppDomain.CurrentDomain.BaseDirectory + @"questions.txt", FileMode.OpenOrCreate, FileAccess.Read);
+            if (stream.Length == 0)
+                return new List<Question>();
+            var questions = (List<Question>) formatter.Deserialize(stream);
+            return questions;
         }
     }
 }

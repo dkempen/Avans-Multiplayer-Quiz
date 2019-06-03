@@ -129,7 +129,7 @@ namespace Multiplayer_Quiz.Presentation.WPF
 
         public void RewriteListToDataBase(List<Question> Questions)
         {
-            using (Stream stream = File.Open(@"D:\DataBase.txt",FileMode.Create))
+            using (Stream stream = File.Open(AppDomain.CurrentDomain.BaseDirectory + @"questions.txt", FileMode.Create))
             {
                 stream.SetLength(0);
                 IFormatter formatter = new BinaryFormatter();
