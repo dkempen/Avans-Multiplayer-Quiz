@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,16 +25,18 @@ namespace Multiplayer_Quiz.Presentation.WPF
     /// <summary>
     /// Interaction logic for WPF.xaml
     /// </summary>
+    [Serializable]
     public partial class WPF : UserControl
     {
         private Server server;
         private List<Question> questions;
+  
 
         public WPF(Server server, List<Question> questions)
         {
             InitializeComponent();
             this.server = server;
-            this.questions = questions;
+            this.questions = questions;     
         }
 
         private void ListViewItem_Selected(object sender, RoutedEventArgs e)
@@ -91,6 +96,7 @@ namespace Multiplayer_Quiz.Presentation.WPF
             questions.Remove(q);
             QuestionListView.ItemsSource = questions;
             RefreshListView();
+            RewriteListToDataBase(questions);
         }
 
         private void SaveBtn_Click(object sender, RoutedEventArgs e)
@@ -102,6 +108,7 @@ namespace Multiplayer_Quiz.Presentation.WPF
             string[] answers = {AnswerTextBox.Text, AnswerTextBox1.Text, AnswerTextBox2.Text, AnswerTextBox3.Text};
             q.SetQuestion(QuestionTextBox.Text);
             q.SetAnswer(answers);
+            RewriteListToDataBase(questions);
             RefreshListView();
         }
 
@@ -109,6 +116,25 @@ namespace Multiplayer_Quiz.Presentation.WPF
         {
             var view = CollectionViewSource.GetDefaultView(QuestionListView.ItemsSource);
             view.Refresh();
+        }
+
+        public void WriteQuestionToDatabase(Question question)
+        {
+            IFormatter formatter = new BinaryFormatter();
+            Stream stream = new FileStream(@"D:\DataBase.txt", FileMode.Append, FileAccess.Write);
+
+            formatter.Serialize(stream, question);
+            stream.Close();
+        }
+
+        public void RewriteListToDataBase(List<Question> Questions)
+        {
+            using (Stream stream = File.Open(@"D:\DataBase.txt",FileMode.Create))
+            {
+                stream.SetLength(0);
+                IFormatter formatter = new BinaryFormatter();
+                formatter.Serialize(stream,Questions);
+            }
         }
 
     }

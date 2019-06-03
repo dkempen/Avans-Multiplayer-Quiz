@@ -101,5 +101,7 @@ namespace Multiplayer_Quiz.Networking
                     return ip;
             throw new Exception("No network adapters with an IPv4 address in the system!");
         }
+
+
     }
 }

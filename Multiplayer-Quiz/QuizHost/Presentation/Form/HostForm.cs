@@ -4,9 +4,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -41,7 +44,8 @@ namespace Multiplayer_Quiz
         {
             questions.Add(new Question("What is the first positive natural number?", new[] { "1", "2", "3", "4" }));
             questions.Add(new Question("What color is a banana?", new[] { "Yellow", "Red", "Purple", "Pink" }));
-            questions.Add(new Question("What color is an orange?", new[] { "Orange", "Red", "Purple", "Pink" }));
+            questions.Add(new Question("What color is an orange?", new[] { "Orange", "Red", "Purple", "Pink" }));        
+            questions = ReadQuestionsFromDatabase();
             SetQuestionListData();
 
             new Thread(() => server.RunServer(questions)).Start();
@@ -89,6 +93,17 @@ namespace Multiplayer_Quiz
             }
 
             Invoke(new Action(() => wpf.QuestionListView.ItemsSource = Questions));
+        }
+ 
+
+        public List<Question> ReadQuestionsFromDatabase()
+        {
+            IFormatter formatter = new BinaryFormatter();
+            Stream stream = new FileStream(@"D:\DataBase.txt", FileMode.Open, FileAccess.Read);
+            List<Question> Questions = new List<Question>();
+
+            Questions = (List<Question>) formatter.Deserialize(stream);
+            return Questions;
         }
     }
 }

@@ -1,8 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace QuizShared.Game
 {
     [JsonObject(MemberSerialization.Fields)]
+    [Serializable]
     public class Question
     {
         public string question {get; set;}
