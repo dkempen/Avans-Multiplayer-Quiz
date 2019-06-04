@@ -273,7 +273,7 @@ namespace QuizClient
                 return;
 
             timer.Enabled = false;
-            OnQuestionAnswered(null);
+            Invoke(new Action(() => OnQuestionAnswered(null)));
         }
 
         private void OnQuestionAnswered(object sender)
