@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Multiplayer_Quiz
+namespace QuizClient
 {
     static class Program
     {
@@ -16,7 +16,7 @@ namespace Multiplayer_Quiz
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form());
+            Application.Run(new ClientForm());
         }
     }
 }
