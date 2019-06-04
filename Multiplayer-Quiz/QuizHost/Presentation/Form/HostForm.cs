@@ -34,6 +34,7 @@ namespace Multiplayer_Quiz
         {
             server = new Server(this);
             InitializeComponent();
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
         }
 
         private void Form_Load(object sender, EventArgs e)
