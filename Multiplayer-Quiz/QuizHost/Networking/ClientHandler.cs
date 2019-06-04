@@ -7,7 +7,7 @@ namespace Multiplayer_Quiz.Networking
 {
     internal class ClientHandler
     {
-        private TcpClient client;
+        private readonly TcpClient client;
         public int id;
 
         public ClientHandler(TcpClient client, int id)
@@ -27,21 +27,11 @@ namespace Multiplayer_Quiz.Networking
             {
                 return TcpReadWrite.Read(client);
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 Console.WriteLine("Exception");
                 return null;
             }
-        }
-
-        public int getId()
-        {
-            return this.id;
-        }
-
-        public void Close()
-        {
-            client.Close();
         }
     }
 }

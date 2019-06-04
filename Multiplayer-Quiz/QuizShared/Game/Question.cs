@@ -1,5 +1,5 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace QuizShared.Game
 {
@@ -7,7 +7,7 @@ namespace QuizShared.Game
     [Serializable]
     public class Question
     {
-        public string question {get; set;}
+        public string question { get; set; }
         private string[] answers; // First is always the correct answer
 
         public Question(string question, string[] answers)

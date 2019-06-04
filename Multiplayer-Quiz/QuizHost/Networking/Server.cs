@@ -9,14 +9,11 @@ namespace Multiplayer_Quiz.Networking
 {
     public class Server
     {
-        private const int NUMBER_OF_PLAYERS = 4;
-
         private TcpListener tcpListener;
-        private List<TcpClient> clients = new List<TcpClient>();
+        private readonly List<TcpClient> clients = new List<TcpClient>();
 
-        public List<Question> questions = new List<Question>();
-        public bool startGameCommand = false;
-        private Form form;
+        public bool startGameCommand;
+        private readonly Form form;
 
         public Server(Form form)
         {
@@ -25,7 +22,7 @@ namespace Multiplayer_Quiz.Networking
 
         public void RunServer(List<Question> questions)
         {
-            tcpListener = new TcpListener(GetLocalIPAddress(), 6969);
+            tcpListener = new TcpListener(GetLocalIpAddress(), 6969);
             tcpListener.Start();
             form.SetNumberOfPlayerText(clients.Count);
 
@@ -46,7 +43,7 @@ namespace Multiplayer_Quiz.Networking
                     // Check for start command
                     if (startGameCommand && clients.Count > 0)
                     {
-                        StartGame(questions);                    
+                        StartGame(questions);
                     }
 
                     // Start listening again because of timeout
@@ -61,37 +58,23 @@ namespace Multiplayer_Quiz.Networking
                     }
                     continue;
                 }
-
-                // Check if number of clients is max and if not timeout
-                if (clients.Count < NUMBER_OF_PLAYERS)
-                {
-                    // Add to client list
-                    clients.Add(client);
-                    form.SetNumberOfPlayerText(clients.Count);
-                }
-                else
-                {
-                    continue;
-                }
-
-                // check for start command
-                if (clients.Count == NUMBER_OF_PLAYERS)
-                {
-                    StartGame(questions);
-                }
+                
+                // Add to client list
+                clients.Add(client);
+                form.SetNumberOfPlayerText(clients.Count);
             }
         }
 
         public void StartGame(List<Question> questions)
         {
             // Start game
-            Console.WriteLine("Start Game!");
-            new GameSession(clients, questions,form);
-            
+            Console.WriteLine(@"Start Game!");
+            new GameSession(clients, questions, form);
+
             startGameCommand = false;
 
             // Game is done, close all connections
-            foreach (TcpClient client in clients)
+            foreach (var client in clients)
             {
                 client.GetStream().Close();
                 client.Close();
@@ -100,7 +83,7 @@ namespace Multiplayer_Quiz.Networking
             form.SetNumberOfPlayerText(clients.Count);
         }
 
-        public static IPAddress GetLocalIPAddress()
+        public static IPAddress GetLocalIpAddress()
         {
             IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
             foreach (IPAddress ip in host.AddressList)
@@ -108,7 +91,5 @@ namespace Multiplayer_Quiz.Networking
                     return ip;
             throw new Exception("No network adapters with an IPv4 address in the system!");
         }
-
-
     }
 }

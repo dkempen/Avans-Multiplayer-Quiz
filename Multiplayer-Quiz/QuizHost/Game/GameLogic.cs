@@ -1,25 +1,18 @@
 ﻿using QuizShared.Game;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 
 namespace Multiplayer_Quiz.Game
 {
-    class GameLogic
+    internal class GameLogic
     {
         private List<Question> questions;
         private Scores scores;
-        private int playerCount;
         private int index;
 
-        public GameLogic(List<Question> questions, int playerCount, List<int> ids)
+        public GameLogic(List<Question> questions, List<int> ids)
         {
             this.questions = questions;
             scores = new Scores(ids);
-            this.playerCount = playerCount;
             index = -1;
         }
 

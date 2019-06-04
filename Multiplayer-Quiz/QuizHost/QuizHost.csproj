@@ -61,9 +61,6 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Database\IDatabase.cs" />
-    <Compile Include="Database\MongoDB.cs" />
-    <Compile Include="Database\SimpleDatabase.cs" />
     <Compile Include="Game\GameLogic.cs" />
     <Compile Include="Networking\ClientHandler.cs" />
     <Compile Include="Networking\GameSession.cs" />
