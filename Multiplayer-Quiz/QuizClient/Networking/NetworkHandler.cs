@@ -22,7 +22,6 @@ namespace QuizClient.Networking
 
         public void RunClient(object ipAddress)
         {
-            // TODO: Check for busy host
             client = new TcpClient(ipAddress.ToString(), 6969);
 
             while (true)

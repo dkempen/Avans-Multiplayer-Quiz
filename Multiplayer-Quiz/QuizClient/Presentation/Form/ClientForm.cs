@@ -68,7 +68,6 @@ namespace QuizClient
             }
             else
             {
-                // TODO: Try to connect with the server and handle succes and failure
                 new Thread(networkHandler.RunClient).Start(IPTextBox.Text);
                 SetPanel(GamePanel.Lobby);
             }

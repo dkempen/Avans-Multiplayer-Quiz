@@ -83,7 +83,7 @@ namespace Multiplayer_Quiz.Presentation.WPF
 
         private void AddBtn_Click(object sender, RoutedEventArgs e)
         {
-            questions.Add(new Question("Needs to Edited", new[] { "", "", "", "" }));
+            questions.Add(new Question("New question", new[] { "", "", "", "" }));
             QuestionListView.ItemsSource = questions;
             RefreshListView();
         }

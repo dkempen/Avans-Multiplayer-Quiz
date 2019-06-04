@@ -20,8 +20,7 @@ namespace QuizShared.Game
             // If the question was answered incorrectly (-1), don't add a score
             if (time == -1)
                 return;
-
-            // TODO: Change calculation of the score
+            
             int scoreToAdd = 10000 - time;
 
             // If points are to be awarded, add them to the total

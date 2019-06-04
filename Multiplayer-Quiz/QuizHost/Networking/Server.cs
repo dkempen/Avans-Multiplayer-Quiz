@@ -76,7 +76,6 @@ namespace Multiplayer_Quiz.Networking
 
         public void StartGame(List<Question> questions)
         {
-            // TODO: Ping pong
             // Start game
             Console.WriteLine("Start Game!");
             new GameSession(clients, questions,form);

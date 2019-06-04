@@ -34,18 +34,14 @@ namespace Multiplayer_Quiz
         {
             server = new Server(this);
             InitializeComponent();
-            wpf = new WPF(server, questions);
-            
-            wpf.IPadressText.Text = "IPadress: " + LocalIPAddress();
-            wpf.inGameLabel.Visibility = Visibility.Hidden;
         }
 
         private void Form_Load(object sender, EventArgs e)
         {
-            questions.Add(new Question("What is the first positive natural number?", new[] { "1", "2", "3", "4" }));
-            questions.Add(new Question("What color is a banana?", new[] { "Yellow", "Red", "Purple", "Pink" }));
-            questions.Add(new Question("What color is an orange?", new[] { "Orange", "Red", "Purple", "Pink" }));        
             questions = ReadQuestionsFromDatabase();
+            wpf = new WPF(server, questions);
+            wpf.IPadressText.Text = "IPadress: " + LocalIPAddress();
+            wpf.inGameLabel.Visibility = Visibility.Hidden;
             SetQuestionListData();
 
             new Thread(() => server.RunServer(questions)).Start();
