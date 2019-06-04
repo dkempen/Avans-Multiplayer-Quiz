@@ -7,20 +7,8 @@ namespace QuizShared.Networking
 {
     static class TcpProtocol
     {
-        public static string Command = "command";
-        public static string Data = "data";
-
-        #region Helper methods
-        public static string GetCommand(JObject json)
-        {
-            return (string)json[Command];
-        }
-
-        public static string GetData(JObject json)
-        {
-            return (string)json[Data];
-        }
-        #endregion Helper methods
+        public static string command = "command";
+        public static string data = "data";
 
         #region Send by Host
         public static JObject QuestionScoresSend(Question question, Scores scores)
@@ -36,17 +24,16 @@ namespace QuizShared.Networking
             };
         }
 
-        public static JObject SendID(int id)
+        public static JObject SendId(int id)
         {
             return new JObject
             {
                 {"command","id"},
                 {"id",id }
             };
-
         }
 
-        public static int ReadID(JObject json)
+        public static int ReadId(JObject json)
         {
             return JsonConvert.DeserializeObject<int>((string)json["id"]);
         }
@@ -54,22 +41,22 @@ namespace QuizShared.Networking
         public static Tuple<Question, Scores> QuestionScoresParse(JObject json)
         {
             return new Tuple<Question, Scores>(
-                JsonConvert.DeserializeObject<Question>((string)json[Data]["question"]),
-                JsonConvert.DeserializeObject<Scores>((string)json[Data]["scores"]));
+                JsonConvert.DeserializeObject<Question>((string)json[data]["question"]),
+                JsonConvert.DeserializeObject<Scores>((string)json[data]["scores"]));
         }
 
         public static JObject EndScoresSend(Scores scores)
         {
             return new JObject
             {
-                {Command, "endScores"},
-                {Data, JsonConvert.SerializeObject(scores)}
+                {command, "endScores"},
+                {data, JsonConvert.SerializeObject(scores)}
             };
         }
 
         public static Scores EndScoresParse(JObject json)
         {
-            return JsonConvert.DeserializeObject<Scores>((string)json[Data]);
+            return JsonConvert.DeserializeObject<Scores>((string)json[data]);
         }
         #endregion Send by Host
 
@@ -78,21 +65,20 @@ namespace QuizShared.Networking
         {
             return new JObject
             {
-                {Command, "time"},
-                {Data, time}
+                {command, "time"},
+                {data, time}
             };
         }
 
         public static Tuple<Question, Scores> QuestionAndScoreParse(JObject message)
         {
-            Tuple<Question, Scores> tuple;
-            tuple = TcpProtocol.QuestionScoresParse(message);
+            var tuple = QuestionScoresParse(message);
             return tuple;
         }
 
         public static int TimeParse(JObject json)
         {
-            return (int)json[Data];
+            return (int)json[data];
         }
         #endregion Send by Client
     }

@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Net.Sockets;
 using System.Text;
-using Newtonsoft.Json.Linq;
 
 namespace QuizShared.Networking
 {

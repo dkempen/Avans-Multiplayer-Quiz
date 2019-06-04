@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace QuizShared.Game
@@ -7,7 +7,7 @@ namespace QuizShared.Game
     public class Scores
     {
         // Scores saved in a list with an int array: 0 is the id, 1 is the score
-        private List<int[]> scores = new List<int[]>();
+        private readonly List<int[]> scores = new List<int[]>();
 
         public Scores(List<int> ids)
         {
@@ -20,7 +20,7 @@ namespace QuizShared.Game
             // If the question was answered incorrectly (-1), don't add a score
             if (time == -1)
                 return;
-            
+
             int scoreToAdd = 10000 - time;
 
             // If points are to be awarded, add them to the total

@@ -2,7 +2,6 @@
 using QuizClient.Networking;
 using QuizShared.Game;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -17,18 +16,18 @@ namespace QuizClient
 {
     public partial class ClientForm : Form
     {
-        private List<Panel> panels = new List<Panel>();
+        private readonly List<Panel> panels = new List<Panel>();
         private Panel currentPanel;
         private GamePanel currentGamePanel;
 
-        private NetworkHandler networkHandler;
+        private readonly NetworkHandler networkHandler;
 
         private const int AMOUNT_OF_ANSWERS = 4;
-        private MaterialRaisedButton[] answersButtons = new MaterialRaisedButton[AMOUNT_OF_ANSWERS];
+        private readonly MaterialRaisedButton[] answersButtons = new MaterialRaisedButton[AMOUNT_OF_ANSWERS];
         private int correctButton;
 
-        private Stopwatch stopwatch = new Stopwatch();
-        private Timer timer = new Timer();
+        private readonly Stopwatch stopwatch = new Stopwatch();
+        private readonly Timer timer = new Timer();
         private int seconds;
         private int id;
 
@@ -49,7 +48,7 @@ namespace QuizClient
         private void Form_Load(object sender, EventArgs e)
         {
         }
-        
+
         #region Form Callbacks
 
         // Listener for the ip textbox
@@ -181,7 +180,7 @@ namespace QuizClient
             switch (currentGamePanel)
             {
                 case GamePanel.Ip:
-                    IPTextBox.Text = NetworkHandler.GetLocalIPAddress().ToString();
+                    IPTextBox.Text = NetworkHandler.GetLocalIpAddress().ToString();
                     break;
 
                 case GamePanel.Lobby:
@@ -233,7 +232,7 @@ namespace QuizClient
             }
 
             // Display score
-            ScoreLabel.Text = received.Item2.GetScore(getID(id)).ToString();
+            ScoreLabel.Text = received.Item2.GetScore(GetId(id)).ToString();
 
             // Set 10 second timer
             seconds = 10;
@@ -245,7 +244,7 @@ namespace QuizClient
             enableButtons(true);
         }
 
-        public int getID(int id)
+        public int GetId(int id)
         {
             this.id = id;
             return this.id;
@@ -273,7 +272,7 @@ namespace QuizClient
                 return;
 
             timer.Enabled = false;
-            OnQuestionAnswered(null);
+            Invoke(new Action(() => OnQuestionAnswered(null)));
         }
 
         private void OnQuestionAnswered(object sender)
@@ -303,6 +302,7 @@ namespace QuizClient
             foreach (var button in answersButtons)
                 button.Enabled = enable;
         }
+
         #endregion Question Logic
 
         #region Endgame Logic
@@ -318,7 +318,7 @@ namespace QuizClient
 
             foreach (var score in sorted.OrderByDescending(key => key.Value))
             {
-                var scoreLabel = new MaterialLabel {Text = score.Key + @": " + score.Value};
+                var scoreLabel = new MaterialLabel { Text = score.Key + @": " + score.Value };
                 ScoresFlowPanel.Controls.Add(scoreLabel);
                 if (score.Key == id)
                     scoreLabel.Font = new Font(scoreLabel.Font, FontStyle.Bold);

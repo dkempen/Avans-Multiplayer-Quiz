@@ -4,7 +4,6 @@ using QuizShared.Game;
 using QuizShared.Networking;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
 using System.Threading;
 
@@ -13,12 +12,12 @@ namespace Multiplayer_Quiz.Networking
     internal class GameSession
     {
         private GameLogic gameLogic;
-        private List<ClientHandler> clientHandlers = new List<ClientHandler>();
-        private List<Question> questions;
-        private List<int> ids = new List<int>();
-        private Form form;
+        private readonly List<ClientHandler> clientHandlers = new List<ClientHandler>();
+        private readonly List<Question> questions;
+        private readonly List<int> ids = new List<int>();
+        private readonly Form form;
 
-        public GameSession(List<TcpClient> clients, List<Question> questions,Form form)
+        public GameSession(List<TcpClient> clients, List<Question> questions, Form form)
         {
             int id = 0;
             foreach (TcpClient client in clients)
@@ -35,26 +34,25 @@ namespace Multiplayer_Quiz.Networking
         public void StartGame()
         {
             // Intis
-            int players = clientHandlers.Count();
+            int players = clientHandlers.Count;
             form.gameStarted = true;
-            form.setGameStarted();
-            gameLogic = new GameLogic(questions, players, ids);
-            Question currentQuestion;
+            form.SetGameStarted();
+            gameLogic = new GameLogic(questions, ids);
 
             foreach (ClientHandler client in clientHandlers)
             {
-                client.Write(TcpProtocol.SendID(client.id));
+                client.Write(TcpProtocol.SendId(client.id));
             }
 
             // Start the game loop
             while (true)
             {
-                currentQuestion = gameLogic.NextQuestion();
+                var currentQuestion = gameLogic.NextQuestion();
                 if (currentQuestion == null)
                 {
                     EndGame();
                     form.gameStarted = false;
-                    form.setGameStarted();
+                    form.SetGameStarted();
                     return;
                 }
 
@@ -63,17 +61,17 @@ namespace Multiplayer_Quiz.Networking
 
                 // Wait for all clients to be finished (in threads)
                 int finishedClients = 0;
-                while (finishedClients != players) 
+                while (finishedClients != players)
                 {
-                    foreach(ClientHandler client in clientHandlers)
+                    foreach (ClientHandler client in clientHandlers)
                     {
                         int playerTime = TcpProtocol.TimeParse(client.Read());
                         gameLogic.AddToScore(client.id, playerTime);
                         finishedClients++;
 
                         //for debugging
-                        Console.WriteLine("Playertime: " + playerTime);
-                        Console.WriteLine("PlayerID: " + client.id + "Score: " + gameLogic.GetScore(client.id));
+                        Console.WriteLine(@"Playertime: " + playerTime);
+                        Console.WriteLine(@"PlayerID: " + client.id + @"Score: " + gameLogic.GetScore(client.id));
                     }
                     Thread.Sleep(1);
                 }
@@ -95,6 +93,5 @@ namespace Multiplayer_Quiz.Networking
             foreach (ClientHandler client in clientHandlers)
                 client.Write(message);
         }
-
     }
 }

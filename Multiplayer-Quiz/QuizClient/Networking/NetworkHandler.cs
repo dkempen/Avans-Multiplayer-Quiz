@@ -1,8 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
-using QuizShared.Game;
 using QuizShared.Networking;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -12,8 +10,7 @@ namespace QuizClient.Networking
     internal class NetworkHandler
     {
         private TcpClient client;
-        private ClientForm form;
-
+        private readonly ClientForm form;
 
         public NetworkHandler(ClientForm clientForm)
         {
@@ -32,7 +29,7 @@ namespace QuizClient.Networking
                 switch (command)
                 {
                     case "id":
-                        form.Invoke(new Action(() => form.getID(TcpProtocol.ReadID(received))));
+                        form.Invoke(new Action(() => form.GetId(TcpProtocol.ReadId(received))));
                         break;
                     case "questionScores":
                         form.Invoke(new Action(() => form.HandleQuestionsScores(TcpProtocol.QuestionAndScoreParse(received))));
@@ -51,7 +48,7 @@ namespace QuizClient.Networking
             TcpReadWrite.Write(client, TcpProtocol.TimeSend(time));
         }
 
-        public static IPAddress GetLocalIPAddress()
+        public static IPAddress GetLocalIpAddress()
         {
             IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
             foreach (IPAddress ip in host.AddressList)
