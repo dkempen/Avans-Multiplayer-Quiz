@@ -50,7 +50,15 @@ namespace Multiplayer_Quiz.Networking
                     }
 
                     // Start listening again because of timeout
-                    tcpListener.Start();
+                    try
+                    {
+                        tcpListener.Start();
+                    }
+                    catch (Exception)
+                    {
+                        tcpListener.Stop();
+                        tcpListener.Start();
+                    }
                     continue;
                 }
 
